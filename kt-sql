@@ -69,7 +69,19 @@ else
 fi
 
 echo "* Spajanie SQL suborov popisnych dat ..."
-find $ROOT_DIR/sql_p -type f -iname *.sql -exec cat "{}" >> sql/popisne_udaje.sql \;
+#SM, 22.06.2017, z celoslovenskeho by bol subor "sql/popisne_udaje.sql" velmi objemny, skusime rozdelit po ciastkach >>>
+#find $ROOT_DIR/sql_p -type f -iname *.sql -exec cat "{}" >> sql/popisne_udaje.sql \;
+find $ROOT_DIR/sql_p -type f -iname bp*.sql -exec cat "{}" >> sql/popisne_udaje_bp.sql \;
+find $ROOT_DIR/sql_p -type f -iname cs*.sql -exec cat "{}" >> sql/popisne_udaje_cs.sql \;
+find $ROOT_DIR/sql_p -type f -iname ep*.sql -exec cat "{}" >> sql/popisne_udaje_ep.sql \;
+find $ROOT_DIR/sql_p -type f -iname lv*.sql -exec cat "{}" >> sql/popisne_udaje_lv.sql \;
+find $ROOT_DIR/sql_p -type f -iname nj*.sql -exec cat "{}" >> sql/popisne_udaje_nj.sql \;
+find $ROOT_DIR/sql_p -type f -iname pa*.sql -exec cat "{}" >> sql/popisne_udaje_pa.sql \;
+find $ROOT_DIR/sql_p -type f -iname pk*.sql -exec cat "{}" >> sql/popisne_udaje_pk.sql \;
+find $ROOT_DIR/sql_p -type f -iname pv*.sql -exec cat "{}" >> sql/popisne_udaje_pv.sql \;
+find $ROOT_DIR/sql_p -type f -iname uz*.sql -exec cat "{}" >> sql/popisne_udaje_uz.sql \;
+find $ROOT_DIR/sql_p -type f -iname vl*.sql -exec cat "{}" >> sql/popisne_udaje_vl.sql \;
+#SM, 22.06.2017 <<<
 echo;
 
 
