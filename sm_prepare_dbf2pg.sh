@@ -45,22 +45,25 @@ for typ in "${dbf_typy[@]}"; do
          pgdbf -P -T -s 'cp852' -c -D -E ${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${typ}"')([0-9]{6}) (\()(.*),\1 \2 \4row_id SERIAL PRIMARY KEY\, icutj NUMERIC(6)\, \5,g' >> $ROOT_DIR/sql_p/${typ}.sql
        fi
        echo "CREATE INDEX idx_${typ}_icutj ON ${typ}(icutj);" >>$ROOT_DIR/sql_p/${typ}.sql
+       echo "BEGIN;" >> $ROOT_DIR/sql_p/${typ}.sql
+       echo "\\COPY ${typ} FROM STDIN" >> $ROOT_DIR/sql_p/${typ}.sql
     fi
 
-    echo "BEGIN;" >> $ROOT_DIR/sql_p/${typ}.sql
-    echo "\\COPY ${typ} FROM STDIN" >> $ROOT_DIR/sql_p/${typ}.sql
+#    echo "BEGIN;" >> $ROOT_DIR/sql_p/${typ}.sql
+#    echo "SAVEPOINT pred_copy_${ku};"
+#    echo "\\COPY ${typ} FROM STDIN" >> $ROOT_DIR/sql_p/${typ}.sql
     if [ ${m} == "true" ]; then
        pgdbf -P -T -s 'cp852' -C -D -E -r -m ${cesta}/${name}.fpt ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"$(grep ^[0-9] sql_p/${typ}.sql |wc -l)"','"${ku}"',$0}' >> $ROOT_DIR/sql_p/${typ}.sql
     else
        pgdbf -P -T -s 'cp852' -C -D -E -r ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"$(grep ^[0-9] sql_p/${typ}.sql |wc -l)"','"${ku}"',$0}' >> $ROOT_DIR/sql_p/${typ}.sql
     fi
     echo "\\." >> $ROOT_DIR/sql_p/${typ}.sql
-    echo "COMMIT;" >> $ROOT_DIR/sql_p/${typ}.sql
+#    echo "COMMIT;" >> $ROOT_DIR/sql_p/${typ}.sql
 
 #    echo "unikátny počet stlpcov typu ${typ}: `grep -P '\t' sql/${typ}.sql | awk -F"\t" '{print NF}' | sort -nu | uniq`"
     COUNTER=$(expr $COUNTER + 1)
   done
-  
+  echo "COMMIT;" >> $ROOT_DIR/sql_p/${typ}.sql
   echo "pocet spracovanych suborov, ktore maju min. 1 zaznam: `expr ${COUNTER} - 1`" >> $ROOT_DIR/log/konv_dbf.txt
   echo -e "${typ}: STOP: `date`" >> $ROOT_DIR/log/konv_dbf.txt
 done
