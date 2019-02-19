@@ -1,6 +1,8 @@
 #!/bin/bash
 # pouzitie: ./prepare_dbf2pg.sh data/
-# poziadavky: [pgdbf](https://github.com/kstrauser/pgdbf) (verzia min.: 0.6.3)
+# požiadavky: [pgdbf](https://github.com/kstrauser/pgdbf) (verzia min.: 0.6.3)
+# výhodou oproti skriptu **kt-import_dbf2** je, že nástroj **pgdbf**, ktorý je tu využívaný, navrhuje aj štruktúru výslednej psql tabuľky (nie je teda potrebné dolaďovať sql štruktúru v ďalších skriptoch) 
+# nevýhodou sú: pomalšie spracovanie; v štruktúre tbl. sú všetky číselné atribúty navrhnuté ako [numeric](https://www.postgresql.org/docs/current/datatype-numeric.html#DATATYPE-NUMERIC-DECIMAL)
 
 set -e
 
