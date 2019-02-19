@@ -65,3 +65,8 @@ for typ in "${dbf_typy[@]}"; do
   echo -e "${typ}: STOP: `date`" >> $ROOT_DIR/log/konv_dbf.txt
 done
 IFS=$SAVEIFS
+
+### TODO ###
+# identifikovanie numerickych stlpcov, vhodnych na indexovanie
+# dbf_dump --info ${f} |grep '^[1-9]' | grep -P '\sN\s' |awk '{print $2}'
+# dbf_dump --info data/dbf/bp800481.dbf |grep '^[1-9]' | grep -P '\s.*\s' |awk '{print $2" "$3"("$4","$5")"}'
