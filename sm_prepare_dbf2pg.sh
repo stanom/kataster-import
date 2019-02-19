@@ -28,6 +28,7 @@ for typ in "${dbf_typy[@]}"; do
     cesta=$(dirname $f)
     name=$(basename $f '.dbf')
     ku=$(echo ${name} |sed -E 's,^([a-zA-Z]{2})([0-9]{6}),\2,g')
+    tbl_name="kn_${typ}"
 
     m=false
     if [ -f "${cesta}/${name}.fpt" ]; then
@@ -38,15 +39,15 @@ for typ in "${dbf_typy[@]}"; do
     fi;
 
     if [ ${COUNTER} == "1" ]; then
-       #echo "pgdbf -P -T -s 'cp852' -c -D -E ${memo}${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${typ}"')([0-9]{6}) (\()(.*),\1 \2 \4row_id SERIAL\, icutj NUMERIC(6)\, \5,g' >> $ROOT_DIR/sql_p/${typ}.sql"
+       #echo "pgdbf -P -T -s 'cp852' -c -D -E ${memo}${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${tbl_name}"')([0-9]{6}) (\()(.*),\1 \2 \4row_id SERIAL\, icutj NUMERIC(6)\, \5,g' >> $ROOT_DIR/sql_p/${typ}.sql"
        if [ ${m} == "true" ]; then
-         pgdbf -P -T -s 'cp852' -c -D -E -m ${cesta}/${name}.fpt ${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${typ}"')([0-9]{6}) (\()(.*),\1 \2 \4row_id SERIAL PRIMARY KEY\, icutj NUMERIC(6)\, \5,g' >> $ROOT_DIR/sql_p/${typ}.sql
+         pgdbf -P -T -s 'cp852' -c -D -E -m ${cesta}/${name}.fpt ${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${tbl_name}"')([0-9]{6}) (\()(.*),\1 \2 \4row_id SERIAL PRIMARY KEY\, icutj NUMERIC(6)\, \5,g' >> $ROOT_DIR/sql_p/${typ}.sql
        else
-         pgdbf -P -T -s 'cp852' -c -D -E ${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${typ}"')([0-9]{6}) (\()(.*),\1 \2 \4row_id SERIAL PRIMARY KEY\, icutj NUMERIC(6)\, \5,g' >> $ROOT_DIR/sql_p/${typ}.sql
+         pgdbf -P -T -s 'cp852' -c -D -E ${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${tbl_name}"')([0-9]{6}) (\()(.*),\1 \2 \4row_id SERIAL PRIMARY KEY\, icutj NUMERIC(6)\, \5,g' >> $ROOT_DIR/sql_p/${typ}.sql
        fi
-       echo "CREATE INDEX idx_${typ}_icutj ON ${typ}(icutj);" >>$ROOT_DIR/sql_p/${typ}.sql
+       echo "CREATE INDEX idx_${tbl_name}_icutj ON ${tbl_name}(icutj);" >>$ROOT_DIR/sql_p/${typ}.sql
        echo "BEGIN;" >> $ROOT_DIR/sql_p/${typ}.sql
-       echo "\\COPY ${typ} FROM STDIN" >> $ROOT_DIR/sql_p/${typ}.sql
+       echo "\\COPY ${tbl_name} FROM STDIN" >> $ROOT_DIR/sql_p/${typ}.sql
     fi
 
 #    echo "BEGIN;" >> $ROOT_DIR/sql_p/${typ}.sql
