@@ -74,3 +74,5 @@ IFS=$SAVEIFS
 # identifikovanie numerickych stlpcov, vhodnych na indexovanie
 # dbf_dump --info ${f} |grep '^[1-9]' | grep -P '\sN\s' |awk '{print $2}'
 # dbf_dump --info data/dbf/bp800481.dbf |grep '^[1-9]' | grep -P '\s.*\s' |awk '{print $2" "$3"("$4","$5")"}'
+# premenovať stlpec "icutj" na "ku"
+# dopočítať atribút pa.parckey (z "ku" a "cpa")
