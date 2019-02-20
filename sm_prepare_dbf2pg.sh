@@ -106,6 +106,6 @@ IFS=$SAVEIFS
 # OK: pri uz a vl su texty obsahujuce "\r\n" -> sed 's/\\r\\n/ /g' {uz,vl}.sql
 
 ### SKUSENOSTI ###
-# pgdbf prekonvertoval hodnotu '8401000000' na '8.401E+10'
+# pgdbf prekonvertoval hodnotu '8401000000' na '8.401E+10' (stalo sa to pri súbore "vl801411.dbf" z 31.12.2018)
 # # # dosledok: psql: ERROR:  numeric field overflow (https://github.com/kstrauser/pgdbf/issues/34)
 # # # # # #  # #      DETAIL:  A field with precision 10, scale 0 must round to an absolute value less than 10^10.
