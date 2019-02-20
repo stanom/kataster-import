@@ -104,3 +104,8 @@ IFS=$SAVEIFS
 # # # SQL> SELECT (ku || lpad(cpa::text,11,'0')( AS parckey FROM kn_pa;
 # # # BASH> printf "852104%011d" 1234567
 # OK: pri uz a vl su texty obsahujuce "\r\n" -> sed 's/\\r\\n/ /g' {uz,vl}.sql
+
+### SKUSENOSTI ###
+# pgdbf prekonvertoval hodnotu '8401000000' na '8.401E+10'
+# # # dosledok: psql: ERROR:  numeric field overflow
+# # # # # #  # #      DETAIL:  A field with precision 10, scale 0 must round to an absolute value less than 10^10.
