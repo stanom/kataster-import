@@ -107,5 +107,5 @@ IFS=$SAVEIFS
 
 ### SKUSENOSTI ###
 # pgdbf prekonvertoval hodnotu '8401000000' na '8.401E+10'
-# # # dosledok: psql: ERROR:  numeric field overflow
+# # # dosledok: psql: ERROR:  numeric field overflow (https://github.com/kstrauser/pgdbf/issues/34)
 # # # # # #  # #      DETAIL:  A field with precision 10, scale 0 must round to an absolute value less than 10^10.
