@@ -328,9 +328,7 @@ BEGIN;
 		pvz integer,
 		kpv smallint,
 		ico bigint,
---SM, 21.06.2017, podla kat. udajov z 28.04.2017 >
---    pcz bigint,
---SM, 21.06.2017 <
+		pcz bigint,
 		sta integer,
 		rci bigint,
 		stb integer,
