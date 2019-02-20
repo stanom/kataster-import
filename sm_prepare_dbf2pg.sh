@@ -11,14 +11,15 @@ set -e
 
 ROOT_DIR="$(readlink -e $1)"
 cd "$ROOT_DIR"
+LOG="$ROOT_DIR/log/konv_dbf.txt"
 
 SAVEIFS=$IFS
 IFS=$'\n';
 dbf_typy=(bp cs ep lv pa pk pv uz vl)
 for typ in "${dbf_typy[@]}"; do
   COUNTER=1
-  echo -e "${typ}: START: `date`" >> $ROOT_DIR/log/konv_dbf.txt
-  echo -e "pocet DBF: $(ls $ROOT_DIR/dbf/${typ}*.dbf |wc -l)" |tee -a $ROOT_DIR/log/konv_dbf.txt
+  echo -e "${typ}: START: `date`" >> $LOG
+  echo -e "pocet DBF: $(ls $ROOT_DIR/dbf/${typ}*.dbf |wc -l)" |tee -a $LOG
   
   for f in $(find $ROOT_DIR/dbf -type f -iname "${typ}*.dbf" -print); do
     echo -en "\r${COUNTER}";
@@ -80,9 +81,9 @@ for typ in "${dbf_typy[@]}"; do
     COUNTER=$(expr $COUNTER + 1)
   done
 #  echo "COMMIT;" >> $ROOT_DIR/sql_p/${typ}.sql
-  echo "pocet spracovanych suborov, ktore maju min. 1 zaznam: `expr ${COUNTER} - 1`" >> $ROOT_DIR/log/konv_dbf.txt
-  echo -e "${typ}: STOP: `date`" >> $ROOT_DIR/log/konv_dbf.txt
-  sed 's/\\r\\n/ /g' 
+  echo "pocet spracovanych suborov, ktore maju min. 1 zaznam: `expr ${COUNTER} - 1`" >> $LOG
+  echo -e "${typ}: STOP: `date`" >> $LOG
+  sed -i 's/\\r\\n/ /g' $ROOT_DIR/sql_p/${typ}.sql
 done
 IFS=$SAVEIFS
 
