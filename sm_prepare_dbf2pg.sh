@@ -68,7 +68,7 @@ for typ in "${dbf_typy[@]}"; do
 
     echo "BEGIN;" >> ${OUTPUT_DIR}/${typ}.sql
     echo "SAVEPOINT pred_copy_ku_${ku};" >> ${OUTPUT_DIR}/${typ}.sql
-    echo "\\COPY ${typ} FROM STDIN" >> ${OUTPUT_DIR}/${typ}.sql
+    echo "\\COPY ${tbl_name} FROM STDIN" >> ${OUTPUT_DIR}/${typ}.sql
     
     if [ ${m} == "true" ]; then
 #    if [ ${typ} == "pv" ]; then
