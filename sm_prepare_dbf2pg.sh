@@ -46,10 +46,10 @@ for typ in "${dbf_typy[@]}"; do
 
     if [ ${COUNTER} == "1" ]; then
        nove_stlpce="row_id SERIAL PRIMARY KEY\,"
-       nove_stlpce = "${nove_stlpce}ku NUMERIC(6)\,"
+       nove_stlpce="${nove_stlpce}ku NUMERIC(6)\,"
        # ak sa jedna o 'ep' alebo 'pa', treba dopocitat aj stlpec parckey
        if [ ${typ} == "ep" ] || [ ${typ} == "pa" ] ; then
-          nove_stlpce = "${nove_stlpce}parckey VARCHAR(17)\,"
+          nove_stlpce="${nove_stlpce}parckey VARCHAR(17)\,"
        fi
        #echo "pgdbf -P -T -s 'cp852' -c -D -E ${memo}${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${tbl_name}"')([0-9]{6}) (\()(.*),\1 \2 \4 '"${nove_stlpce}"' \5,g' >> ${OUTPUT_DIR}/${typ}.sql"
        if [ ${m} == "true" ]; then
@@ -63,7 +63,7 @@ for typ in "${dbf_typy[@]}"; do
     fi
 
     echo "BEGIN;" >> ${OUTPUT_DIR}/${typ}.sql
-    echo "SAVEPOINT pred_copy_ku_${ku};"
+    echo "SAVEPOINT pred_copy_ku_${ku};" >> ${OUTPUT_DIR}/${typ}.sql
     echo "\\COPY ${typ} FROM STDIN" >> ${OUTPUT_DIR}/${typ}.sql
     if [ ${m} == "true" ]; then
 #    if [ ${typ} == "pv" ]; then
