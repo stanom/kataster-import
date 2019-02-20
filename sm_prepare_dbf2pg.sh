@@ -1,8 +1,11 @@
 #!/bin/bash
 # použitie: ./prepare_dbf2pg.sh data/
 # požiadavky: [pgdbf](https://github.com/kstrauser/pgdbf) (verzia min.: 0.6.3)
-# výhodou oproti skriptu **kt-import_dbf2** je, že nástroj **pgdbf**, ktorý je tu využívaný, navrhuje aj štruktúru výslednej psql tabuľky (nie je teda potrebné dolaďovať sql štruktúru v ďalších skriptoch) 
-# nevýhodou sú: pomalšie spracovanie; v štruktúre tbl. sú všetky číselné atribúty navrhnuté ako [numeric](https://www.postgresql.org/docs/current/datatype-numeric.html#DATATYPE-NUMERIC-DECIMAL)
+# výhody (oproti skriptu **kt-import_dbf2**):
+# # # nástroj **pgdbf**, ktorý je tu využívaný, navrhuje aj štruktúru výslednej psql tabuľky (nie je teda potrebné dolaďovať sql štruktúru v ďalších skriptoch) 
+# nevýhody:
+# # # pomalšie spracovanie,
+# # # v štruktúre tbl. sú všetky číselné atribúty navrhnuté ako DATATYPE-NUMERIC-DECIMAL, aj tie, ktoré by mohli byť typu INTEGER
 
 set -e
 
@@ -76,3 +79,4 @@ IFS=$SAVEIFS
 # dbf_dump --info data/dbf/bp800481.dbf |grep '^[1-9]' | grep -P '\s.*\s' |awk '{print $2" "$3"("$4","$5")"}'
 # premenovať stlpec "icutj" na "ku"
 # dopočítať atribút pa.parckey (z "ku" a "cpa")
+# pri uz a vl su texty obsahujuce "\r\n" -> sed 's/\\r\\n/ /g' {uz,vl}.sql
