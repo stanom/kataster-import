@@ -74,7 +74,7 @@ for typ in "${dbf_typy[@]}"; do
        fi
     fi
     echo "\\." >> $ROOT_DIR/sql_p/${typ}.sql
-#    echo "COMMIT;" >> $ROOT_DIR/sql_p/${typ}.sql
+    echo "COMMIT;" >> $ROOT_DIR/sql_p/${typ}.sql
 
 #    echo "unikátny počet stlpcov typu ${typ}: `grep -P '\t' sql/${typ}.sql | awk -F"\t" '{print NF}' | sort -nu | uniq`"
     COUNTER=$(expr $COUNTER + 1)
@@ -82,6 +82,7 @@ for typ in "${dbf_typy[@]}"; do
 #  echo "COMMIT;" >> $ROOT_DIR/sql_p/${typ}.sql
   echo "pocet spracovanych suborov, ktore maju min. 1 zaznam: `expr ${COUNTER} - 1`" >> $ROOT_DIR/log/konv_dbf.txt
   echo -e "${typ}: STOP: `date`" >> $ROOT_DIR/log/konv_dbf.txt
+  sed 's/\\r\\n/ /g' 
 done
 IFS=$SAVEIFS
 
