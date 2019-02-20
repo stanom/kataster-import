@@ -11,17 +11,19 @@ set -e
 
 ROOT_DIR="$(readlink -e $1)"
 cd "$ROOT_DIR"
-LOG="$ROOT_DIR/log/konv_dbf.txt"
+INPUT_DIR="$ROOT_DIR/dbf"
+OUTPUT_DIR="$ROOT_DIR/sql_p"
+LOG_FILE="$ROOT_DIR/log/konv_dbf.txt"
 
 SAVEIFS=$IFS
 IFS=$'\n';
 dbf_typy=(bp cs ep lv pa pk pv uz vl)
 for typ in "${dbf_typy[@]}"; do
   COUNTER=1
-  echo -e "${typ}: START: `date`" >> $LOG
-  echo -e "pocet DBF: $(ls $ROOT_DIR/dbf/${typ}*.dbf |wc -l)" |tee -a $LOG
+  echo -e "${typ}: START: `date`" >> $LOG_FILE
+  echo -e "pocet DBF: $(ls ${INPUT_DIR}/${typ}*.dbf |wc -l)" |tee -a $LOG_FILE
   
-  for f in $(find $ROOT_DIR/dbf -type f -iname "${typ}*.dbf" -print); do
+  for f in $(find ${INPUT_DIR} -type f -iname "${typ}*.dbf" -print); do
     echo -en "\r${COUNTER}";
     
     # ak dbf subor nema ani 1 zaznam, nespracuvat ho
@@ -36,7 +38,7 @@ for typ in "${dbf_typy[@]}"; do
 
     m=false
     if [ -f "${cesta}/${name}.fpt" ]; then
-      memo="-m ${ROOT_DIR}/dbf/${name}.fpt "
+      memo="-m ${INPUT_DIR}/${name}.fpt "
       m=true
     else
       memo=""
@@ -49,41 +51,41 @@ for typ in "${dbf_typy[@]}"; do
        if [ ${typ} == "ep" ] || [ ${typ} == "pa" ] ; then
           nove_stlpce = "${nove_stlpce}parckey VARCHAR(17)\,"
        fi
-       #echo "pgdbf -P -T -s 'cp852' -c -D -E ${memo}${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${tbl_name}"')([0-9]{6}) (\()(.*),\1 \2 \4 '"${nove_stlpce}"' \5,g' >> $ROOT_DIR/sql_p/${typ}.sql"
+       #echo "pgdbf -P -T -s 'cp852' -c -D -E ${memo}${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${tbl_name}"')([0-9]{6}) (\()(.*),\1 \2 \4 '"${nove_stlpce}"' \5,g' >> ${OUTPUT_DIR}/${typ}.sql"
        if [ ${m} == "true" ]; then
-         pgdbf -P -T -s 'cp852' -c -D -E -m ${cesta}/${name}.fpt ${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${tbl_name}"')([0-9]{6}) (\()(.*),\1 \2 \4 '"${nove_stlpce}"' \5,g' >> $ROOT_DIR/sql_p/${typ}.sql
+         pgdbf -P -T -s 'cp852' -c -D -E -m ${cesta}/${name}.fpt ${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${tbl_name}"')([0-9]{6}) (\()(.*),\1 \2 \4 '"${nove_stlpce}"' \5,g' >> ${OUTPUT_DIR}/${typ}.sql
        else
-         pgdbf -P -T -s 'cp852' -c -D -E ${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${tbl_name}"')([0-9]{6}) (\()(.*),\1 \2 \4 '"${nove_stlpce}"' \5,g' >> $ROOT_DIR/sql_p/${typ}.sql
+         pgdbf -P -T -s 'cp852' -c -D -E ${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${tbl_name}"')([0-9]{6}) (\()(.*),\1 \2 \4 '"${nove_stlpce}"' \5,g' >> ${OUTPUT_DIR}/${typ}.sql
        fi
-       echo "CREATE INDEX idx_${tbl_name}_ku ON ${tbl_name}(ku);" >>$ROOT_DIR/sql_p/${typ}.sql
-#       echo "BEGIN;" >> $ROOT_DIR/sql_p/${typ}.sql
-#       echo "\\COPY ${tbl_name} FROM STDIN" >> $ROOT_DIR/sql_p/${typ}.sql
+       echo "CREATE INDEX idx_${tbl_name}_ku ON ${tbl_name}(ku);" >>${OUTPUT_DIR}/${typ}.sql
+#       echo "BEGIN;" >> ${OUTPUT_DIR}/${typ}.sql
+#       echo "\\COPY ${tbl_name} FROM STDIN" >> ${OUTPUT_DIR}/${typ}.sql
     fi
 
-    echo "BEGIN;" >> $ROOT_DIR/sql_p/${typ}.sql
+    echo "BEGIN;" >> ${OUTPUT_DIR}/${typ}.sql
     echo "SAVEPOINT pred_copy_ku_${ku};"
-    echo "\\COPY ${typ} FROM STDIN" >> $ROOT_DIR/sql_p/${typ}.sql
+    echo "\\COPY ${typ} FROM STDIN" >> ${OUTPUT_DIR}/${typ}.sql
     if [ ${m} == "true" ]; then
 #    if [ ${typ} == "pv" ]; then
-       pgdbf -P -T -s 'cp852' -C -D -E -r -m ${cesta}/${name}.fpt ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"$(grep ^[0-9] sql_p/${typ}.sql |wc -l)"','"${ku}"',$0}' >> $ROOT_DIR/sql_p/${typ}.sql
+       pgdbf -P -T -s 'cp852' -C -D -E -r -m ${cesta}/${name}.fpt ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"','"${ku}"',$0}' >> ${OUTPUT_DIR}/${typ}.sql
     else
        # ak sa jedna o 'ep' alebo 'pa', treba dopocitat aj stlpec parckey
        if [ ${typ} == "ep" ] || [ ${typ} == "pa" ] ; then
-          pgdbf -P -T -s 'cp852' -C -D -E -r ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t'"${ku}"'d\t%s\n",NR + '"$(grep ^[0-9] sql_p/${typ}.sql |wc -l)"','"${ku}"',$1,$0}' >> $ROOT_DIR/sql_p/${typ}.sql
+          pgdbf -P -T -s 'cp852' -C -D -E -r ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t'"${ku}"'d\t%s\n",NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"','"${ku}"',$1,$0}' >> ${OUTPUT_DIR}/${typ}.sql
        else
-          pgdbf -P -T -s 'cp852' -C -D -E -r ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"$(grep ^[0-9] sql_p/${typ}.sql |wc -l)"','"${ku}"',$0}' >> $ROOT_DIR/sql_p/${typ}.sql
+          pgdbf -P -T -s 'cp852' -C -D -E -r ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"','"${ku}"',$0}' >> ${OUTPUT_DIR}/${typ}.sql
        fi
     fi
-    echo "\\." >> $ROOT_DIR/sql_p/${typ}.sql
-    echo "COMMIT;" >> $ROOT_DIR/sql_p/${typ}.sql
+    echo "\\." >> ${OUTPUT_DIR}/${typ}.sql
+    echo "COMMIT;" >> ${OUTPUT_DIR}/${typ}.sql
 
-#    echo "unikátny počet stlpcov typu ${typ}: `grep -P '\t' sql/${typ}.sql | awk -F"\t" '{print NF}' | sort -nu | uniq`"
+#    echo "unikátny počet stlpcov typu ${typ}: `grep -P '\t' ${OUTPUT_DIR}/${typ}.sql | awk -F"\t" '{print NF}' | sort -nu | uniq`"
     COUNTER=$(expr $COUNTER + 1)
   done
-#  echo "COMMIT;" >> $ROOT_DIR/sql_p/${typ}.sql
-  echo "pocet spracovanych suborov, ktore maju min. 1 zaznam: `expr ${COUNTER} - 1`" >> $LOG
-  echo -e "${typ}: STOP: `date`" >> $LOG
-  sed -i 's/\\r\\n/ /g' $ROOT_DIR/sql_p/${typ}.sql
+#  echo "COMMIT;" >> ${OUTPUT_DIR}/${typ}.sql
+  echo "pocet spracovanych suborov, ktore maju min. 1 zaznam: `expr ${COUNTER} - 1`" >> $LOG_FILE
+  echo -e "${typ}: STOP: `date`" >> $LOG_FILE
+  sed -i 's/\\r\\n/ /g' ${OUTPUT_DIR}/${typ}.sql
 done
 IFS=$SAVEIFS
 
