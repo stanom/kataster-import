@@ -46,25 +46,30 @@ for typ in "${dbf_typy[@]}"; do
 
     if [ ${COUNTER} == "1" ]; then
        nove_stlpce="row_id SERIAL PRIMARY KEY\,"
-       nove_stlpce="${nove_stlpce}ku NUMERIC(6)\,"
+       nove_stlpce="${nove_stlpce} ku NUMERIC(6)\,"
        # ak sa jedna o 'ep' alebo 'pa', treba dopocitat aj stlpec parckey
        if [ ${typ} == "ep" ] || [ ${typ} == "pa" ] ; then
-          nove_stlpce="${nove_stlpce}parckey VARCHAR(17)\,"
+          nove_stlpce="${nove_stlpce} parckey VARCHAR(17)\,"
        fi
+       
        #echo "pgdbf -P -T -s 'cp852' -c -D -E ${memo}${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${tbl_name}"')([0-9]{6}) (\()(.*),\1 \2 \4 '"${nove_stlpce}"' \5,g' >> ${OUTPUT_DIR}/${typ}.sql"
        if [ ${m} == "true" ]; then
-         pgdbf -P -T -s 'cp852' -c -D -E -m ${cesta}/${name}.fpt ${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${typ}"')([0-9]{6}) (\()(.*),\1 \2 \4 '"${nove_stlpce}"' \5,g' >> ${OUTPUT_DIR}/${typ}.sql
+         pgdbf -P -T -s 'cp852' -c -D -E -m ${cesta}/${name}.fpt ${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${typ}"')([0-9]{6}) (\()(.*),\1 '"${tbl_name}"' \4 '"${nove_stlpce}"' \5,g' >> ${OUTPUT_DIR}/${typ}.sql
        else
-         pgdbf -P -T -s 'cp852' -c -D -E ${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${typ}"')([0-9]{6}) (\()(.*),\1 \2 \4 '"${nove_stlpce}"' \5,g' >> ${OUTPUT_DIR}/${typ}.sql
+         pgdbf -P -T -s 'cp852' -c -D -E ${f} |grep -P '^CREATE TABLE' \
+           |sed -E 's,(CREATE TABLE)\ ('"${typ}"')([0-9]{6}) (\()(.*),\1 '"${tbl_name}"' \4 '"${nove_stlpce}"' \5,g' \
+             >> ${OUTPUT_DIR}/${typ}.sql
        fi
        echo "CREATE INDEX idx_${tbl_name}_ku ON ${tbl_name}(ku);" >>${OUTPUT_DIR}/${typ}.sql
 #       echo "BEGIN;" >> ${OUTPUT_DIR}/${typ}.sql
 #       echo "\\COPY ${tbl_name} FROM STDIN" >> ${OUTPUT_DIR}/${typ}.sql
     fi
 
+
     echo "BEGIN;" >> ${OUTPUT_DIR}/${typ}.sql
     echo "SAVEPOINT pred_copy_ku_${ku};" >> ${OUTPUT_DIR}/${typ}.sql
     echo "\\COPY ${typ} FROM STDIN" >> ${OUTPUT_DIR}/${typ}.sql
+    
     if [ ${m} == "true" ]; then
 #    if [ ${typ} == "pv" ]; then
        pgdbf -P -T -s 'cp852' -C -D -E -r -m ${cesta}/${name}.fpt ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"','"${ku}"',$0}' >> ${OUTPUT_DIR}/${typ}.sql
@@ -76,8 +81,10 @@ for typ in "${dbf_typy[@]}"; do
           pgdbf -P -T -s 'cp852' -C -D -E -r ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"','"${ku}"',$0}' >> ${OUTPUT_DIR}/${typ}.sql
        fi
     fi
+    
     echo "\\." >> ${OUTPUT_DIR}/${typ}.sql
     echo "COMMIT;" >> ${OUTPUT_DIR}/${typ}.sql
+
 
 #    echo "unikátny počet stlpcov typu ${typ}: `grep -P '\t' ${OUTPUT_DIR}/${typ}.sql | awk -F"\t" '{print NF}' | sort -nu | uniq`"
     COUNTER=$(expr $COUNTER + 1)
@@ -93,5 +100,7 @@ IFS=$SAVEIFS
 # identifikovanie numerickych stlpcov, vhodnych na indexovanie
 # dbf_dump --info ${f} |grep '^[1-9]' | grep -P '\sN\s' |awk '{print $2}'
 # dbf_dump --info data/dbf/bp800481.dbf |grep '^[1-9]' | grep -P '\s.*\s' |awk '{print $2" "$3"("$4","$5")"}'
-# dopočítať atribút {ep,pa}.parckey (z "ku" a "cpa") SQL: 'ku || lpad(cpa::text,11,'0')'
-# pri uz a vl su texty obsahujuce "\r\n" -> sed 's/\\r\\n/ /g' {uz,vl}.sql
+# OK: dopočítať atribút {ep,pa}.parckey (z "ku" a "cpa")
+# # # SQL> SELECT (ku || lpad(cpa::text,11,'0')( AS parckey FROM kn_pa;
+# # # BASH> printf "852104%011d" 1234567
+# OK: pri uz a vl su texty obsahujuce "\r\n" -> sed 's/\\r\\n/ /g' {uz,vl}.sql
