@@ -34,8 +34,8 @@ for typ in "${dbf_typy[@]}"; do
     # dbfinfo vi tiez zobrazit pocet zaznamov, avsak zapocitava aj tie so statusom "DELETED"
     #are_records_in_cur_file=$(dbf_dump $f |wc -l)
     #"dbf_dump |wc -l" je zdlhave, staci mi vediet, ci aspon 1 zaznam je v dbf subore
-    if [ ${typ} == "pv" ] && [ -f "${cesta}/${name}.fpt" ]; then
-       are_records_in_cur_file=$(pgdbf -C -T -r -m ${cesta}/${name}.fpt ${f} |grep -v '^\\' |head -1 |wc -l)
+    if [ ${typ} == "pv" ] && [ -f "${INPUT_DIR}/${name}.fpt" ]; then
+       are_records_in_cur_file=$(pgdbf -C -T -r -m ${INPUT_DIR}/${name}.fpt ${f} |grep -v '^\\' |head -1 |wc -l)
     else
        are_records_in_cur_file=$(pgdbf -C -T -r ${f} |grep -v '^\\' |head -1 |wc -l)
     fi
@@ -47,13 +47,13 @@ for typ in "${dbf_typy[@]}"; do
 #       break
 #    fi
 
-    cesta=$(dirname $f)
+#    cesta=$(dirname $f)
     name=$(basename $f '.dbf')
     ku=$(echo ${name} |sed -E 's,^([a-zA-Z]{2})([0-9]{6}),\2,g')
     tbl_name="kn_${typ}"
 
     m=false
-    if [ -f "${cesta}/${name}.fpt" ]; then
+    if [ ${typ} == "pv" ] && [ -f "${INPUT_DIR}/${name}.fpt" ]; then
       memo="-m ${INPUT_DIR}/${name}.fpt "
       m=true
     else
@@ -70,7 +70,7 @@ for typ in "${dbf_typy[@]}"; do
        
        #echo "pgdbf -P -T -s 'cp852' -c -D -E ${memo}${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${tbl_name}"')([0-9]{6}) (\()(.*),\1 \2 \4 '"${nove_stlpce}"' \5,g' >> ${OUTPUT_DIR}/${typ}.sql"
        if [ ${m} == "true" ]; then
-         pgdbf -P -T -s 'cp852' -c -D -E -m ${cesta}/${name}.fpt ${f} \
+         pgdbf -P -T -s 'cp852' -c -D -E -m ${INPUT_DIR}/${name}.fpt ${f} \
 	   |grep -P '^CREATE TABLE' \
 	   |sed -E 's,(CREATE TABLE)\ ('"${typ}"')([0-9]{6}) (\()(.*),\1 '"${tbl_name}"' \4 '"${nove_stlpce}"' \5,g' \
 	   |sed 's/\ DATE, /\ VARCHAR(10), /g' \
@@ -99,8 +99,8 @@ for typ in "${dbf_typy[@]}"; do
     
     if [ ${m} == "true" ]; then
 #    if [ ${typ} == "pv" ]; then
-#       pgdbf -P -T -s 'cp852' -C -D -E -r -m ${cesta}/${name}.fpt ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"','"${ku}"',$0}' >> ${OUTPUT_DIR}/${typ}.sql
-       pgdbf -P -T -s 'cp852' -C -D -E -r -m ${cesta}/${name}.fpt ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"${prev_riadok_counter}"','"${ku}"',$0}' >> ${OUTPUT_DIR}/${typ}.sql
+#       pgdbf -P -T -s 'cp852' -C -D -E -r -m ${INPUT_DIR}/${name}.fpt ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"','"${ku}"',$0}' >> ${OUTPUT_DIR}/${typ}.sql
+       pgdbf -P -T -s 'cp852' -C -D -E -r -m ${INPUT_DIR}/${name}.fpt ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"${prev_riadok_counter}"','"${ku}"',$0}' >> ${OUTPUT_DIR}/${typ}.sql
     else
        # ak sa jedna o 'cs' alebo 'ep' alebo 'pa', treba dopocitat aj stlpec parckey
        if [ ${typ} == "cs" ] || [ ${typ} == "ep" ] || [ ${typ} == "pa" ] ; then
