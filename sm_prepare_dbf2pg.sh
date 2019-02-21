@@ -112,7 +112,7 @@ IFS=$SAVEIFS
 
 ### CAS IMPORTU ###
 # bp:  0h. 28min.  3s. ( 1318561 z.)
-# cs:  0h. 51min.  1s. ( 1829798 z.)
+# cs:  0h. 52min. 22s. ( 1829847 z.) (import do DB: 31s.)
 # ep:  2h. 53min. 25s. ( 7907918 z.) 
 # lv:  1h. 45min. 17s. ( 4578608 z.)
 # pa:  3h. 14min. 40s. ( 7967216 z.)
