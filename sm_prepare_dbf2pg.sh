@@ -34,7 +34,11 @@ for typ in "${dbf_typy[@]}"; do
     # dbfinfo vi tiez zobrazit pocet zaznamov, avsak zapocitava aj tie so statusom "DELETED"
     #are_records_in_cur_file=$(dbf_dump $f |wc -l)
     #"dbf_dump |wc -l" je zdlhave, staci mi vediet, ci aspon 1 zaznam je v dbf subore
-    are_records_in_cur_file=$(pgdbf -C -T -r ${f} |grep -v '^\\' |head -1 |wc -l)
+    if [ ${typ} == "pv" ] && [ -f "${cesta}/${name}.fpt" ]; then
+       are_records_in_cur_file=$(pgdbf -C -T -r -m ${cesta}/${name}.fpt ${f} |grep -v '^\\' |head -1 |wc -l)
+    else
+       are_records_in_cur_file=$(pgdbf -C -T -r ${f} |grep -v '^\\' |head -1 |wc -l)
+    fi
     if [ "${are_records_in_cur_file}" == "0" ]; then
        continue
     fi
