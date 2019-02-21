@@ -27,8 +27,15 @@ for typ in "${dbf_typy[@]}"; do
     echo -en "\r${COUNTER}";
     
     # ak dbf subor nema ani 1 zaznam, nespracuvat ho
-    if [ `dbf_dump $f |wc -l` == "0" ]; then
+    # dbfinfo vi tiez zobrazit pocet zaznamov, avsak zapocitava aj tie so statusom "DELETED"
+    #are_records_in_cur_file=$(dbf_dump $f |wc -l)
+    #"dbf_dump |wc -l" je zdlhave, staci mi vediet, ci aspon 1 zaznam je v dbf subore
+    are_records_in_cur_file=$(pgdbf -C -T -r ${f} |grep -v '^\\' |head -1)
+    if [ "${records_in_cur_file}" == "0" ]; then
        continue
+    fi
+    if [ "${COUNTER}" -gt "3"] ; then 
+       exit 0
     fi
 
     cesta=$(dirname $f)
@@ -75,7 +82,6 @@ for typ in "${dbf_typy[@]}"; do
     if [ ${COUNTER} == "1" ]; then
        # na začiatku má výsledný sql súbor 0 záznamov
        prev_riadok_counter=0
-       riadok_counter=0
     fi
 
     echo "BEGIN;" >> ${OUTPUT_DIR}/${typ}.sql
@@ -84,20 +90,21 @@ for typ in "${dbf_typy[@]}"; do
     
     if [ ${m} == "true" ]; then
 #    if [ ${typ} == "pv" ]; then
-       pgdbf -P -T -s 'cp852' -C -D -E -r -m ${cesta}/${name}.fpt ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"','"${ku}"',$0}' >> ${OUTPUT_DIR}/${typ}.sql
+#       pgdbf -P -T -s 'cp852' -C -D -E -r -m ${cesta}/${name}.fpt ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"','"${ku}"',$0}' >> ${OUTPUT_DIR}/${typ}.sql
+       pgdbf -P -T -s 'cp852' -C -D -E -r -m ${cesta}/${name}.fpt ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"${prev_riadok_counter}"','"${ku}"',$0}' >> ${OUTPUT_DIR}/${typ}.sql
     else
        # ak sa jedna o 'cs' alebo 'ep' alebo 'pa', treba dopocitat aj stlpec parckey
        if [ ${typ} == "cs" ] || [ ${typ} == "ep" ] || [ ${typ} == "pa" ] ; then
-          pgdbf -P -T -s 'cp852' -C -D -E -r ${f} |grep '^[0-9].*' |awk '{printf "%s\t'"${ku}"'%011d\t%s\t%s\n", NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"', $1, '"${ku}"' ,$0}' >> ${OUTPUT_DIR}/${typ}.sql
-#          pgdbf -P -T -s 'cp852' -C -D -E -r ${f} |grep '^[0-9].*' |awk '{print "prev_riadok_counter="NR; printf "%s\t'"${ku}"'%011d\t%s\t%s\n", NR + '"${prev_riadok_counter}"', $1, '"${ku}"' ,$0}' >> ${OUTPUT_DIR}/${typ}.sql
+#          pgdbf -P -T -s 'cp852' -C -D -E -r ${f} |grep '^[0-9].*' |awk '{printf "%s\t'"${ku}"'%011d\t%s\t%s\n", NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"', $1, '"${ku}"' ,$0}' >> ${OUTPUT_DIR}/${typ}.sql
+          pgdbf -P -T -s 'cp852' -C -D -E -r ${f} |grep '^[0-9].*' |awk '{print "prev_riadok_counter="NR; printf "%s\t'"${ku}"'%011d\t%s\t%s\n", NR + '"${prev_riadok_counter}"', $1, '"${ku}"' ,$0}' >> ${OUTPUT_DIR}/${typ}.sql
 #pokusy:
 # # # prev_riadok_count=0; pgdbf -P -T -s 'cp852' -C -D -E -r /mnt/tmp/kataster-import/data/dbf/pa852104.dbf | head -5 |grep '^[0-9].*' |awk '{printf "%s\t852104%011d\t%s\t%s\n", NR + '"${prev_riadok_count}"', $1, 852 ,$0; print "prev_riadok_counter=" NR'} ; echo "${prev_riadok_count}";
        else
-          pgdbf -P -T -s 'cp852' -C -D -E -r ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n", NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"', '"${ku}"', $0}' >> ${OUTPUT_DIR}/${typ}.sql
-#          pgdbf -P -T -s 'cp852' -C -D -E -r ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n", NR + '"${prev_riadok_counter}"', '"${ku}"', $0}' >> ${OUTPUT_DIR}/${typ}.sql
+#          pgdbf -P -T -s 'cp852' -C -D -E -r ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n", NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"', '"${ku}"', $0}' >> ${OUTPUT_DIR}/${typ}.sql
+          pgdbf -P -T -s 'cp852' -C -D -E -r ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n", NR + '"${prev_riadok_counter}"', '"${ku}"', $0}' >> ${OUTPUT_DIR}/${typ}.sql
        fi
     fi
-    
+    prev_riadok_counter=`tail -1 ${OUTPUT_DIR}/${typ}.sql |awk '{print $1}'   
     echo "\\." >> ${OUTPUT_DIR}/${typ}.sql
     echo "COMMIT;" >> ${OUTPUT_DIR}/${typ}.sql
 
