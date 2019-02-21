@@ -111,12 +111,13 @@ IFS=$SAVEIFS
 # # # # # #  # #      DETAIL:  A field with precision 10, scale 0 must round to an absolute value less than 10^10.
 
 ### CAS IMPORTU ###
-# bp: 0h. 28min. 3s.
-# cs: 0h. 51min. 1s.
-# ep: 2h. 53min. 25s.
-# lv: 
-# pa: 3h. 14min. 40s.
-# pk: 
-# pv: 
-# uz: 
-# vl:
+# bp:  0h. 28min.  3s. ( 1318561 z.)
+# cs:  0h. 51min.  1s. ( 1829798 z.)
+# ep:  2h. 53min. 25s. ( 7907918 z.) 
+# lv:  1h. 45min. 17s. ( 4578608 z.)
+# pa:  3h. 14min. 40s. ( 7967216 z.)
+# pk:  0h.  2min. 31s. (    6031 z.)
+# pv:  - veľmi dlho -  (57354535 z.)
+# uz:  0h. 45min. 23s. ( 1522075 z.)
+# vl: 23h.             (28587998 z.)
+	
