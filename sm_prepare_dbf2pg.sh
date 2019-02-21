@@ -36,7 +36,7 @@ for typ in "${dbf_typy[@]}"; do
     #are_records_in_cur_file=$(dbf_dump $f |wc -l)
     #"dbf_dump |wc -l" je zdlhave, staci mi vediet, ci aspon 1 zaznam je v dbf subore
     are_records_in_cur_file=$(pgdbf -C -T -r ${f} |grep -v '^\\' |head -1)
-    if [ "${records_in_cur_file}" == "0" ]; then
+    if [ "${are_records_in_cur_file}" == "0" ]; then
        continue
     fi
     if [ "${COUNTER}" -gt "10" ] ; then 
