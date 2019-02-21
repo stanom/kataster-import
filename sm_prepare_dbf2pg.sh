@@ -109,3 +109,14 @@ IFS=$SAVEIFS
 # pgdbf prekonvertoval hodnotu '8401000000' na '8.401E+10' (stalo sa to pri súbore "vl801411.dbf" z 31.12.2018)
 # # # dosledok: psql: ERROR:  numeric field overflow (https://github.com/kstrauser/pgdbf/issues/34)
 # # # # # #  # #      DETAIL:  A field with precision 10, scale 0 must round to an absolute value less than 10^10.
+
+### CAS IMPORTU ###
+# bp: 0h. 28min. 3s.
+# cs: 0h. 51min. 1s.
+# ep: 2h. 53min. 25s.
+# lv: 
+# pa: 3h. 14min. 40s.
+# pk: 
+# pv: 
+# uz: 
+# vl:
