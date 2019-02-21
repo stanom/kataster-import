@@ -60,7 +60,7 @@ for typ in "${dbf_typy[@]}"; do
            |sed -E 's,(CREATE TABLE)\ ('"${typ}"')([0-9]{6}) (\()(.*),\1 '"${tbl_name}"' \4 '"${nove_stlpce}"' \5,g' \
              >> ${OUTPUT_DIR}/${typ}.sql
        fi
-       echo "CREATE INDEX idx_${tbl_name}_ku ON ${tbl_name}(ku);" >>${OUTPUT_DIR}/${typ}.sql
+#       echo "CREATE INDEX idx_${tbl_name}_ku ON ${tbl_name}(ku);" >>${OUTPUT_DIR}/${typ}.sql
 #       echo "BEGIN;" >> ${OUTPUT_DIR}/${typ}.sql
 #       echo "\\COPY ${tbl_name} FROM STDIN" >> ${OUTPUT_DIR}/${typ}.sql
     fi
