@@ -69,7 +69,7 @@ for typ in "${dbf_typy[@]}"; do
        nove_stlpce="${nove_stlpce} ku NUMERIC(6)\,"
        
        #echo "pgdbf -P -T -s 'cp852' -c -D -E ${memo}${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${tbl_name}"')([0-9]{6}) (\()(.*),\1 \2 \4 '"${nove_stlpce}"' \5,g' >> ${OUTPUT_DIR}/${typ}.sql"
-       if [ ${m} == "true" ]; then
+       if [ ${typ} == "pv" ] || [ ${m} == "true" ]; then
          pgdbf -P -T -s 'cp852' -c -D -E -m ${INPUT_DIR}/${name}.fpt ${f} \
 	   |grep -P '^CREATE TABLE' \
 	   |sed -E 's,(CREATE TABLE)\ ('"${typ}"')([0-9]{6}) (\()(.*),\1 '"${tbl_name}"' \4 '"${nove_stlpce}"' \5,g' \
@@ -97,7 +97,7 @@ for typ in "${dbf_typy[@]}"; do
     echo "SAVEPOINT pred_copy_ku_${ku};" >> ${OUTPUT_DIR}/${typ}.sql
     echo "\\COPY ${tbl_name} FROM STDIN" >> ${OUTPUT_DIR}/${typ}.sql
     
-    if [ ${m} == "true" ]; then
+    if [ ${typ} == "pv" ] || [ ${m} == "true" ]; then
 #    if [ ${typ} == "pv" ]; then
 #       pgdbf -P -T -s 'cp852' -C -D -E -r -m ${INPUT_DIR}/${name}.fpt ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"','"${ku}"',$0}' >> ${OUTPUT_DIR}/${typ}.sql
        pgdbf -P -T -s 'cp852' -C -D -E -r -m ${INPUT_DIR}/${name}.fpt ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"${prev_riadok_counter}"','"${ku}"',$0}' >> ${OUTPUT_DIR}/${typ}.sql
@@ -158,117 +158,3 @@ IFS=$SAVEIFS
 # pv:  - veľmi dlho -  (57354535 z.) - po doladeni: -
 # uz:  0h. 45min. 23s. ( 1522075 z.) - po doladeni: 51s. !
 # vl: 23h.             (28587998 z.) - po doladeni: 7min. 28s. !
-: '
-1Table pv800481 has memo fields, but couldn't open the related memo file
-2Table pv802735 has memo fields, but couldn't open the related memo file
-3Table pv803065 has memo fields, but couldn't open the related memo file
-4Table pv803570 has memo fields, but couldn't open the related memo file
-5Table pv803693 has memo fields, but couldn't open the related memo file
-6Table pv803707 has memo fields, but couldn't open the related memo file
-7Table pv804096 has memo fields, but couldn't open the related memo file
-8Table pv804274 has memo fields, but couldn't open the related memo file
-9Table pv804380 has memo fields, but couldn't open the related memo file
-10Table pv804690 has memo fields, but couldn't open the related memo file
-11Table pv804959 has memo fields, but couldn't open the related memo file
-12Table pv805211 has memo fields, but couldn't open the related memo file
-13Table pv805301 has memo fields, but couldn't open the related memo file
-14Table pv805343 has memo fields, but couldn't open the related memo file
-15Table pv805556 has memo fields, but couldn't open the related memo file
-16Table pv805700 has memo fields, but couldn't open the related memo file
-17Table pv805866 has memo fields, but couldn't open the related memo file
-18Table pv806005 has memo fields, but couldn't open the related memo file
-19Table pv806099 has memo fields, but couldn't open the related memo file
-20Table pv807265 has memo fields, but couldn't open the related memo file
-21Table pv808814 has memo fields, but couldn't open the related memo file
-22Table pv808881 has memo fields, but couldn't open the related memo file
-23Table pv809985 has memo fields, but couldn't open the related memo file
-24Table pv810649 has memo fields, but couldn't open the related memo file
-25Table pv811483 has memo fields, but couldn't open the related memo file
-26Table pv813303 has memo fields, but couldn't open the related memo file
-27Table pv814482 has memo fields, but couldn't open the related memo file
-28Table pv815594 has memo fields, but couldn't open the related memo file
-29Table pv819824 has memo fields, but couldn't open the related memo file
-30Table pv819867 has memo fields, but couldn't open the related memo file
-31Table pv820407 has memo fields, but couldn't open the related memo file
-32Table pv820865 has memo fields, but couldn't open the related memo file
-33Table pv821128 has memo fields, but couldn't open the related memo file
-34Table pv821438 has memo fields, but couldn't open the related memo file
-35Table pv821446 has memo fields, but couldn't open the related memo file
-36Table pv821560 has memo fields, but couldn't open the related memo file
-37Table pv821756 has memo fields, but couldn't open the related memo file
-38Table pv821888 has memo fields, but couldn't open the related memo file
-39Table pv822094 has memo fields, but couldn't open the related memo file
-40Table pv822256 has memo fields, but couldn't open the related memo file
-41Table pv822884 has memo fields, but couldn't open the related memo file
-42Table pv822892 has memo fields, but couldn't open the related memo file
-43Table pv823023 has memo fields, but couldn't open the related memo file
-44Table pv823554 has memo fields, but couldn't open the related memo file
-45Table pv826626 has memo fields, but couldn't open the related memo file
-46Table pv826634 has memo fields, but couldn't open the related memo file
-47Table pv826642 has memo fields, but couldn't open the related memo file
-48Table pv828203 has memo fields, but couldn't open the related memo file
-49Table pv828211 has memo fields, but couldn't open the related memo file
-50Table pv829773 has memo fields, but couldn't open the related memo file
-51Table pv830399 has memo fields, but couldn't open the related memo file
-52Table pv832189 has memo fields, but couldn't open the related memo file
-53Table pv833231 has memo fields, but couldn't open the related memo file
-54Table pv835196 has memo fields, but couldn't open the related memo file
-55Table pv835625 has memo fields, but couldn't open the related memo file
-56Table pv835803 has memo fields, but couldn't open the related memo file
-57Table pv835811 has memo fields, but couldn't open the related memo file
-58Table pv836079 has memo fields, but couldn't open the related memo file
-59Table pv837628 has memo fields, but couldn't open the related memo file
-60Table pv838039 has memo fields, but couldn't open the related memo file
-61Table pv838519 has memo fields, but couldn't open the related memo file
-62Table pv838527 has memo fields, but couldn't open the related memo file
-63Table pv839019 has memo fields, but couldn't open the related memo file
-64Table pv841731 has memo fields, but couldn't open the related memo file
-65Table pv841749 has memo fields, but couldn't open the related memo file
-66Table pv841838 has memo fields, but couldn't open the related memo file
-67Table pv842036 has memo fields, but couldn't open the related memo file
-68Table pv845931 has memo fields, but couldn't open the related memo file
-69Table pv846163 has memo fields, but couldn't open the related memo file
-70Table pv846554 has memo fields, but couldn't open the related memo file
-71Table pv846775 has memo fields, but couldn't open the related memo file
-72Table pv846791 has memo fields, but couldn't open the related memo file
-73Table pv846813 has memo fields, but couldn't open the related memo file
-74Table pv846821 has memo fields, but couldn't open the related memo file
-75Table pv847755 has memo fields, but couldn't open the related memo file
-76Table pv851922 has memo fields, but couldn't open the related memo file
-77Table pv851931 has memo fields, but couldn't open the related memo file
-78Table pv852716 has memo fields, but couldn't open the related memo file
-79Table pv852813 has memo fields, but couldn't open the related memo file
-80Table pv853771 has memo fields, but couldn't open the related memo file
-81Table pv854964 has memo fields, but couldn't open the related memo file
-82Table pv856657 has memo fields, but couldn't open the related memo file
-83Table pv857335 has memo fields, but couldn't open the related memo file
-84Table pv859303 has memo fields, but couldn't open the related memo file
-85Table pv859320 has memo fields, but couldn't open the related memo file
-86Table pv859338 has memo fields, but couldn't open the related memo file
-87Table pv859346 has memo fields, but couldn't open the related memo file
-88Table pv859354 has memo fields, but couldn't open the related memo file
-89Table pv859524 has memo fields, but couldn't open the related memo file
-90Table pv860760 has memo fields, but couldn't open the related memo file
-91Table pv860778 has memo fields, but couldn't open the related memo file
-92Table pv861111 has memo fields, but couldn't open the related memo file
-93Table pv863475 has memo fields, but couldn't open the related memo file
-94Table pv863491 has memo fields, but couldn't open the related memo file
-95Table pv865958 has memo fields, but couldn't open the related memo file
-96Table pv865966 has memo fields, but couldn't open the related memo file
-97Table pv868191 has memo fields, but couldn't open the related memo file
-98Table pv868850 has memo fields, but couldn't open the related memo file
-99Table pv868868 has memo fields, but couldn't open the related memo file
-100Table pv869481 has memo fields, but couldn't open the related memo file
-101Table pv869554 has memo fields, but couldn't open the related memo file
-102Table pv869571 has memo fields, but couldn't open the related memo file
-103Table pv869686 has memo fields, but couldn't open the related memo file
-104Table pv869945 has memo fields, but couldn't open the related memo file
-105Table pv870293 has memo fields, but couldn't open the related memo file
-106Table pv871133 has memo fields, but couldn't open the related memo file
-107Table pv871788 has memo fields, but couldn't open the related memo file
-108Table pv871796 has memo fields, but couldn't open the related memo file
-awk: cmd. line:1: {printf "%s\t%s\t%s\n",NR + \COPY,871796,$0}
-awk: cmd. line:1:                             ^ backslash not last character on line
-awk: cmd. line:1: {printf "%s\t%s\t%s\n",NR + \COPY,871796,$0}
-awk: cmd. line:1:                             ^ syntax error
-'
