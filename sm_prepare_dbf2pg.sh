@@ -17,11 +17,16 @@ LOG_FILE="$ROOT_DIR/log/konv_dbf.txt"
 
 SAVEIFS=$IFS
 IFS=$'\n';
-dbf_typy=(bp cs ep lv pa pk pv uz vl)
+#dbf_typy=(bp cs ep lv pa pk pv uz vl)
+dbf_typy=(bp cs)
 for typ in "${dbf_typy[@]}"; do
+  START_TIME=`date +%s`
+  echo -e ">>> ${typ} >>>" >> $LOG_FILE
+  echo -e " START: `date`" >> $LOG_FILE
+  
   COUNTER=1
-  echo -e "${typ}: START: `date`" >> $LOG_FILE
-  echo -e "pocet DBF: $(ls ${INPUT_DIR}/${typ}*.dbf |wc -l)" |tee -a $LOG_FILE
+  
+  echo -e " pocet DBF: $(ls ${INPUT_DIR}/${typ}*.dbf |wc -l)" >> $LOG_FILE
   
   for f in $(find ${INPUT_DIR} -type f -iname "${typ}*.dbf" -print); do
     echo -en "\r${COUNTER}";
@@ -34,8 +39,8 @@ for typ in "${dbf_typy[@]}"; do
     if [ "${records_in_cur_file}" == "0" ]; then
        continue
     fi
-    if [ "${COUNTER}" -gt "3" ] ; then 
-       exit 0
+    if [ "${COUNTER}" -gt "10" ] ; then 
+       break
     fi
 
     cesta=$(dirname $f)
@@ -113,8 +118,12 @@ for typ in "${dbf_typy[@]}"; do
     COUNTER=$(expr $COUNTER + 1)
   done
 #  echo "COMMIT;" >> ${OUTPUT_DIR}/${typ}.sql
-  echo "pocet spracovanych suborov, ktore maju min. 1 zaznam: `expr ${COUNTER} - 1`" >> $LOG_FILE
-  echo -e "${typ}: STOP: `date`" >> $LOG_FILE
+  echo " pocet spracovanych suborov, ktore maju min. 1 zaznam: `expr ${COUNTER} - 1`" >> $LOG_FILE
+  echo -e " STOP: `date`" >> $LOG_FILE
+  END_TIME=`date +%s`
+  DURATION=$(($END_TIME-$START_TIME))
+  echo -e " TRVANIE: ${DURATION}" >> $LOG_FILE
+  echo -e "<<< ${typ} <<<" >> $LOG_FILE
   sed -i 's/\\r\\n/ /g' ${OUTPUT_DIR}/${typ}.sql
 done
 IFS=$SAVEIFS
