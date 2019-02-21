@@ -122,7 +122,7 @@ for typ in "${dbf_typy[@]}"; do
   echo -e " STOP: `date`" >> $LOG_FILE
   END_TIME=`date +%s`
   DURATION=$(($END_TIME-$START_TIME))
-  echo -e " TRVANIE: ${DURATION}" >> $LOG_FILE
+  echo -e " TRVANIE: `printf '%02dd:%02dh:%02dm:%02ds\n' $(($DURATION/86400)) $(($DURATION%86400/3600)) $(($DURATION%3600/60))   $(($DURATION%60))`" >> $LOG_FILE
   echo -e "<<< ${typ} <<<" >> $LOG_FILE
   sed -i 's/\\r\\n/ /g' ${OUTPUT_DIR}/${typ}.sql
 done
