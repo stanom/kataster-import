@@ -46,11 +46,11 @@ for typ in "${dbf_typy[@]}"; do
 
     if [ ${COUNTER} == "1" ]; then
        nove_stlpce="row_id SERIAL PRIMARY KEY\,"
-       nove_stlpce="${nove_stlpce} ku NUMERIC(6)\,"
-       # ak sa jedna o 'ep' alebo 'pa', treba dopocitat aj stlpec parckey
-       if [ ${typ} == "ep" ] || [ ${typ} == "pa" ] ; then
+       # ak sa jedna o 'cs' alebo 'ep' alebo 'pa', treba dopocitat aj stlpec parckey
+       if [ ${typ} == "cs" ] || [ ${typ} == "ep" ] || [ ${typ} == "pa" ] ; then
           nove_stlpce="${nove_stlpce} parckey VARCHAR(17)\,"
        fi
+       nove_stlpce="${nove_stlpce} ku NUMERIC(6)\,"
        
        #echo "pgdbf -P -T -s 'cp852' -c -D -E ${memo}${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${tbl_name}"')([0-9]{6}) (\()(.*),\1 \2 \4 '"${nove_stlpce}"' \5,g' >> ${OUTPUT_DIR}/${typ}.sql"
        if [ ${m} == "true" ]; then
@@ -74,11 +74,11 @@ for typ in "${dbf_typy[@]}"; do
 #    if [ ${typ} == "pv" ]; then
        pgdbf -P -T -s 'cp852' -C -D -E -r -m ${cesta}/${name}.fpt ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"','"${ku}"',$0}' >> ${OUTPUT_DIR}/${typ}.sql
     else
-       # ak sa jedna o 'ep' alebo 'pa', treba dopocitat aj stlpec parckey
-       if [ ${typ} == "ep" ] || [ ${typ} == "pa" ] ; then
-          pgdbf -P -T -s 'cp852' -C -D -E -r ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t'"${ku}"'%011d\t%s\n",NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"','"${ku}"',$1,$0}' >> ${OUTPUT_DIR}/${typ}.sql
+       # ak sa jedna o 'cs' alebo 'ep' alebo 'pa', treba dopocitat aj stlpec parckey
+       if [ ${typ} == "cs" ] || [ ${typ} == "ep" ] || [ ${typ} == "pa" ] ; then
+          pgdbf -P -T -s 'cp852' -C -D -E -r ${f} |grep '^[0-9].*' |awk '{printf "%s\t'"${ku}"'%011d\t%s\t%s\n", NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"', $1, '"${ku}"' ,$0}' >> ${OUTPUT_DIR}/${typ}.sql
        else
-          pgdbf -P -T -s 'cp852' -C -D -E -r ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"','"${ku}"',$0}' >> ${OUTPUT_DIR}/${typ}.sql
+          pgdbf -P -T -s 'cp852' -C -D -E -r ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n", NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"', '"${ku}"', $0}' >> ${OUTPUT_DIR}/${typ}.sql
        fi
     fi
     
