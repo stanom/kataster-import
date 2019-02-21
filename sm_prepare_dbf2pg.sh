@@ -34,7 +34,7 @@ for typ in "${dbf_typy[@]}"; do
     if [ "${records_in_cur_file}" == "0" ]; then
        continue
     fi
-    if [ "${COUNTER}" -gt "3"] ; then 
+    if [ "${COUNTER}" -gt "3" ] ; then 
        exit 0
     fi
 
@@ -104,7 +104,7 @@ for typ in "${dbf_typy[@]}"; do
           pgdbf -P -T -s 'cp852' -C -D -E -r ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n", NR + '"${prev_riadok_counter}"', '"${ku}"', $0}' >> ${OUTPUT_DIR}/${typ}.sql
        fi
     fi
-    prev_riadok_counter=`tail -1 ${OUTPUT_DIR}/${typ}.sql |awk '{print $1}'   
+    prev_riadok_counter=`tail -1 ${OUTPUT_DIR}/${typ}.sql |awk '{print $1}'`
     echo "\\." >> ${OUTPUT_DIR}/${typ}.sql
     echo "COMMIT;" >> ${OUTPUT_DIR}/${typ}.sql
 
