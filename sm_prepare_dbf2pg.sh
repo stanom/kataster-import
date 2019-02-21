@@ -110,6 +110,8 @@ IFS=$SAVEIFS
 # # # SQL> SELECT (ku || lpad(cpa::text,11,'0')( AS parckey FROM kn_pa;
 # # # BASH> printf "852104%011d" 1234567
 # OK: pri uz a vl su texty obsahujuce "\r\n" -> sed 's/\\r\\n/ /g' {uz,vl}.sql
+# časť skriptu $(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l) môže spôsobovať postupné spomaľovanie, nakoľko, pri každom spracovanom dbf súbore sa zisťuje počet riadkov výsledného súboru, ktorý narastá 
+# # # treba nastaviť špeciálne počítadlo, ktoré si bude zapamätávať poslednú max. hodnotu záznamu
 
 ### SKUSENOSTI ###
 # pgdbf prekonvertoval hodnotu '8401000000' na '8.401E+10' (stalo sa to pri súbore "vl801411.dbf" z 31.12.2018)
