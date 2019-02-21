@@ -263,4 +263,8 @@ IFS=$SAVEIFS
 106Table pv871133 has memo fields, but couldn't open the related memo file
 107Table pv871788 has memo fields, but couldn't open the related memo file
 108Table pv871796 has memo fields, but couldn't open the related memo file
+awk: cmd. line:1: {printf "%s\t%s\t%s\n",NR + \COPY,871796,$0}
+awk: cmd. line:1:                             ^ backslash not last character on line
+awk: cmd. line:1: {printf "%s\t%s\t%s\n",NR + \COPY,871796,$0}
+awk: cmd. line:1:                             ^ syntax error
 '
