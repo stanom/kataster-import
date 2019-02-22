@@ -16,8 +16,8 @@ LOG_FILE="$ROOT_DIR/log/konv_dbf.txt"
 
 SAVEIFS=$IFS
 IFS=$'\n';
-#dbf_typy=(bp cs ep lv pa pk pv uz vl)
-dbf_typy=(bp cs)
+dbf_typy=(bp cs ep lv pa pk pv uz vl)
+#dbf_typy=(bp cs)
 for typ in "${dbf_typy[@]}"; do
   START_TIME=`date +%s`
   echo -e ">>> ${typ} >>>" >> $LOG_FILE
@@ -47,7 +47,7 @@ for typ in "${dbf_typy[@]}"; do
     if [ "${are_records_in_cur_file}" == "0" ]; then
        continue
     fi
-    
+
 #    if [ "${COUNTER}" -gt "10" ] ; then 
 #       break
 #    fi
@@ -67,7 +67,7 @@ for typ in "${dbf_typy[@]}"; do
           nove_stlpce="${nove_stlpce} parckey VARCHAR(17)\,"
        fi
        nove_stlpce="${nove_stlpce} ku NUMERIC(6)\,"
-       
+
        #echo "pgdbf -P -T -s 'cp852' -c -D -E ${memo}${f} |grep -P '^CREATE TABLE' |sed -E 's,(CREATE TABLE)\ ('"${tbl_name}"')([0-9]{6}) (\()(.*),\1 \2 \4 '"${nove_stlpce}"' \5,g' >> ${OUTPUT_DIR}/${typ}.sql"
        if [ ${typ} == "pv" ] || [ ${m} == "true" ]; then
          pgdbf -P -T -s 'cp852' -c -D -E -m ${INPUT_DIR}/${name}.fpt ${f} \
@@ -96,7 +96,7 @@ for typ in "${dbf_typy[@]}"; do
     echo "BEGIN;" >> ${OUTPUT_DIR}/${typ}.sql
     echo "SAVEPOINT pred_copy_ku_${ku};" >> ${OUTPUT_DIR}/${typ}.sql
     echo "\\COPY ${tbl_name} FROM STDIN" >> ${OUTPUT_DIR}/${typ}.sql
-    
+
     if [ ${typ} == "pv" ] || [ ${m} == "true" ]; then
 #    if [ ${typ} == "pv" ]; then
 #       pgdbf -P -T -s 'cp852' -C -D -E -r -m ${INPUT_DIR}/${name}.fpt ${f} |grep '^[0-9].*' |awk '{printf "%s\t%s\t%s\n",NR + '"$(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l)"','"${ku}"',$0}' >> ${OUTPUT_DIR}/${typ}.sql
