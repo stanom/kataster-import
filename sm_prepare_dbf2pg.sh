@@ -29,7 +29,7 @@ for typ in "${dbf_typy[@]}"; do
   
   for f in $(find ${INPUT_DIR} -type f -iname "${typ}*.dbf" -print); do
     echo -en "\r${COUNTER}";
-    
+
     name=$(basename $f '.dbf')
     ku=$(echo ${name} |sed -E 's,^([a-zA-Z]{2})([0-9]{6}),\2,g')
     tbl_name="kn_${typ}"
@@ -43,6 +43,7 @@ for typ in "${dbf_typy[@]}"; do
     else
        are_records_in_cur_file=$(pgdbf -C -T -r ${f} |grep -v '^\\' |head -1 |wc -l)
     fi
+
     if [ "${are_records_in_cur_file}" == "0" ]; then
        continue
     fi
