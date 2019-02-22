@@ -158,3 +158,6 @@ IFS=$SAVEIFS
 # pv:  - veľmi dlho -  (57354535 z.) - po doladeni: -
 # uz:  0h. 45min. 23s. ( 1522075 z.) - po doladeni: 51s. !
 # vl: 23h.             (28587998 z.) - po doladeni: 7min. 28s. !
+
+# pgdbf -P -T -s 'cp852' -C -D -E -r -i 'idu,poz' -m /mnt/tmp/kataster-import/data/dbf/pv812129.fpt /mnt/tmp/kataster-import/data/dbf/pv812129.dbf 
+# # # Segmentation fault
