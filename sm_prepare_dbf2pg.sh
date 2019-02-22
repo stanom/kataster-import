@@ -154,7 +154,7 @@ IFS=$SAVEIFS
 # lv:  1h. 45min. 17s. ( 4578633 z.) - po doladeni: 55s. !
 # pa:  3h. 14min. 40s. ( 7967216 z.) - po doladeni: 1min. 27s. !
 # pk:  0h.  2min. 31s. (    6032 z.) - po doladeni: 29s. !
-# pv:  - veľmi dlho -  (57354535 z.) - po doladeni: -
+# pv:  - veľmi dlho -  (57354535 z.) - po doladeni: 7min. 52s. !
 # uz:  0h. 45min. 23s. ( 1522075 z.) - po doladeni: 51s. !
 # vl: 23h.             (28587998 z.) - po doladeni: 7min. 28s. !
 
