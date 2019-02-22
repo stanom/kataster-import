@@ -30,6 +30,10 @@ for typ in "${dbf_typy[@]}"; do
   for f in $(find ${INPUT_DIR} -type f -iname "${typ}*.dbf" -print); do
     echo -en "\r${COUNTER}";
     
+    name=$(basename $f '.dbf')
+    ku=$(echo ${name} |sed -E 's,^([a-zA-Z]{2})([0-9]{6}),\2,g')
+    tbl_name="kn_${typ}"
+
     # ak dbf subor nema ani 1 zaznam, nespracuvat ho
     # dbfinfo vi tiez zobrazit pocet zaznamov, avsak zapocitava aj tie so statusom "DELETED"
     #are_records_in_cur_file=$(dbf_dump $f |wc -l)
@@ -46,11 +50,6 @@ for typ in "${dbf_typy[@]}"; do
 #    if [ "${COUNTER}" -gt "10" ] ; then 
 #       break
 #    fi
-
-#    cesta=$(dirname $f)
-    name=$(basename $f '.dbf')
-    ku=$(echo ${name} |sed -E 's,^([a-zA-Z]{2})([0-9]{6}),\2,g')
-    tbl_name="kn_${typ}"
 
     m=false
     if [ ${typ} == "pv" ] && [ -f "${INPUT_DIR}/${name}.fpt" ]; then
