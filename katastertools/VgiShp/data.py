@@ -491,9 +491,11 @@ class Vystup_vrstvy(object):
 					# datetime hodnota
 					f.SetField(atribut, *hodnota)
 				else:
-					if isinstance(hodnota, basestring):
-						f.SetField(atribut, hodnota.encode(self.kodovanie))
-					else:
+#SM >>>
+#					if isinstance(hodnota, basestring):
+#						f.SetField(atribut, hodnota.encode(self.kodovanie))
+#					else:
+#SM <<<
 						f.SetField(atribut, hodnota)
 
 			wkt = objekt['wkt']
