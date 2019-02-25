@@ -2,7 +2,7 @@ BEGIN;
 SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.drv; SET statement_timeout=0;
 CREATE TABLE ciselnik.drv (id NUMERIC(2) PRIMARY KEY, popis VARCHAR(90));
 \COPY drv FROM STDIN
-0 NULL  NULL
+0 NULL
 1	Oprávnená držba k pozemku
 2	Nájom k pozemku
 3	Spoluvlastníctvo k pozemku pod stavbou
