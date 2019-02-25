@@ -9,6 +9,7 @@ CREATE TABLE ciselnik.drv (id NUMERIC(2) PRIMARY KEY, popis VARCHAR(90));
 4	Vlastník pozemku je vlastníkom stavby postavenej na tomto pozemku
 5	Vlastník pozemku nie je vlastníkom stavby postavenej na tomto pozemku (pozemkoch)
 7	Právny vzťah nie je evidovaný v súbore popisných informácií katastra nehnuteľností
+8 NULL
 9	Duplicitné alebo viacnásobné vlastníctvo k tej istej nehnuteľnosti alebo k jej časti
 \.
 COMMIT;
