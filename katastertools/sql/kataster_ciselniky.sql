@@ -3668,7 +3668,7 @@ CREATE TABLE ciselnik.drp (id NUMERIC(2) PRIMARY KEY, popis VARCHAR(30), popis2 
 COMMIT;
 BEGIN;
 SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.ums; SET statement_timeout=0;
-CREATE TABLE ciselnik.ums (ums NUMERIC(3) PRIMARY KEY, ums_popis VARCHAR(60));
+CREATE TABLE ciselnik.ums (id NUMERIC(3) PRIMARY KEY, ums_popis VARCHAR(60));
 \COPY ums FROM STDIN
 1	Stavby postavané na zemskom povrchu
 2	Podzemné stavby
@@ -3677,7 +3677,7 @@ CREATE TABLE ciselnik.ums (ums NUMERIC(3) PRIMARY KEY, ums_popis VARCHAR(60));
 COMMIT;
 BEGIN;
 SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.tvl; SET statement_timeout=0;
-CREATE TABLE ciselnik.tvl (tvl NUMERIC(3) PRIMARY KEY, popis VARCHAR(80), popis2 VARCHAR(40));
+CREATE TABLE ciselnik.tvl (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(80), popis2 VARCHAR(40));
 \COPY tvl FROM STDIN
 0	Vlastník, ktorého miesto trvalého pobytu alebo sídlo sú známe.	Vlastník
 1	Správa majetku štátu, kde je vlastníkom Slovenská republika.	Správa majetku štátu, kde je vlastníko
@@ -3691,7 +3691,7 @@ CREATE TABLE ciselnik.tvl (tvl NUMERIC(3) PRIMARY KEY, popis VARCHAR(80), popis2
 COMMIT;
 BEGIN;
 SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.don; SET statement_timeout=0;
-CREATE TABLE ciselnik.don (don NUMERIC(3) PRIMARY KEY, popis VARCHAR(120), popis2 VARCHAR(110));
+CREATE TABLE ciselnik.don (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(120), popis2 VARCHAR(110));
 \COPY don FROM STDIN
 100	Chránená nehnuteľnosť	Chránená nehnuteľnosť
 101	Chránená krajinná oblasť	Chránená krajinná oblasť
@@ -3728,7 +3728,7 @@ CREATE TABLE ciselnik.don (don NUMERIC(3) PRIMARY KEY, popis VARCHAR(120), popis
 COMMIT;
 BEGIN;
 SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.ump; SET statement_timeout=0;
-CREATE TABLE ciselnik.ump (ump NUMERIC(3) PRIMARY KEY, popis VARCHAR(60), popis2 VARCHAR(15));
+CREATE TABLE ciselnik.ump (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(60), popis2 VARCHAR(15));
 \COPY ump FROM STDIN
 1	Pozemok je umiestnený v zastavanom území obce	zastavane
 2	Pozemok je umiestnený mimo zastavaného územia obce	mimo zast.
