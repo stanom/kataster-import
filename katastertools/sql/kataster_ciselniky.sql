@@ -3606,7 +3606,7 @@ Nižná Úvrať	881406	Košice IV	805	NIZNA_UVRAT_881406_KOSICE_IV
 \.
 COMMIT;
 BEGIN;
-SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.c_pkk; SET statement_timeout=0;
+SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.pkk; SET statement_timeout=0;
 CREATE TABLE ciselnik.pkk (id NUMERIC(5) PRIMARY KEY, popis VARCHAR(220), popis2 VARCHAR(112));
 \COPY pkk FROM STDIN
 1	Pozemok využívaný pre rastlinnú výrobu, na ktorom sa pestujú obilniny, okopaniny, krmoviny, technické plodiny, zelenina a iné poľnohospodárske plodiny alebo pozemok dočasne nevyužívaný pre rastlinnú výrobu	Pozemok využívaný pre rastlinnú výrobu, na ktorom sa pestujú obilniny, okopaniny, krmoviny, technické plodi
