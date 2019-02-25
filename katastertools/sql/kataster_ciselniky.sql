@@ -1,7 +1,7 @@
 BEGIN;
-SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.c_drv; SET statement_timeout=0;
-CREATE TABLE ciselnik.c_drv (drv NUMERIC(2), popis VARCHAR(90));
-\COPY c_drv FROM STDIN
+SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.drv; SET statement_timeout=0;
+CREATE TABLE ciselnik.drv (id NUMERIC(2) PRIMARY KEY, popis VARCHAR(90));
+\COPY drv FROM STDIN
 1	1 - Oprávnená držba k pozemku
 2	2 - Nájom k pozemku
 3	3 - Spoluvlastníctvo k pozemku pod stavbou
@@ -12,9 +12,9 @@ CREATE TABLE ciselnik.c_drv (drv NUMERIC(2), popis VARCHAR(90));
 \.
 COMMIT;
 BEGIN;
-SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.c_drs; SET statement_timeout=0;
-CREATE TABLE ciselnik.c_drs (drs NUMERIC(3), drs_popis VARCHAR(100), drs_popis2 VARCHAR(220));
-\COPY c_drs FROM STDIN
+SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.drs; SET statement_timeout=0;
+CREATE TABLE ciselnik.drs (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(100), popis2 VARCHAR(220));
+\COPY drs FROM STDIN
 1	 1 - Priemyselná budova	Priemyselná budova
 2	 2 - Poľnohospodárska budova	Poľnohospodárska budova
 3	 3 - Budova železníc a dráh	Budova železníc a dráh
@@ -41,9 +41,9 @@ CREATE TABLE ciselnik.c_drs (drs NUMERIC(3), drs_popis VARCHAR(100), drs_popis2 
 \.
 COMMIT;
 BEGIN;
-SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.c_kataster; SET statement_timeout=0;
-CREATE TABLE ciselnik.c_kataster (ku_nazov VARCHAR(70), kataster NUMERIC(6), okr_nazov VARCHAR(70), okres NUMERIC(3), ku_nazov_u VARCHAR(70));
-\COPY c_kataster FROM STDIN
+SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.kataster; SET statement_timeout=0;
+CREATE TABLE ciselnik.kataster (ku_nazov VARCHAR(70), kataster NUMERIC(6) UNIQUE, okr_nazov VARCHAR(70), okres NUMERIC(3), ku_nazov_u VARCHAR(70));
+\COPY kataster FROM STDIN
 Borinka	803693	Malacky	106	BORINKA_803693_MALACKY
 Vačková	803707	Malacky	106	VACKOVA_803707_MALACKY
 Gajary	814482	Malacky	106	GAJARY_814482_MALACKY
@@ -3607,8 +3607,8 @@ Nižná Úvrať	881406	Košice IV	805	NIZNA_UVRAT_881406_KOSICE_IV
 COMMIT;
 BEGIN;
 SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.c_pkk; SET statement_timeout=0;
-CREATE TABLE ciselnik.c_pkk (pkk NUMERIC(5), pkk_popis VARCHAR(220), pkk_popis2 VARCHAR(112));
-\COPY c_pkk FROM STDIN
+CREATE TABLE ciselnik.pkk (id NUMERIC(5) PRIMARY KEY, popis VARCHAR(220), popis2 VARCHAR(112));
+\COPY pkk FROM STDIN
 1	 1 - Pozemok využívaný pre rastlinnú výrobu, na ktorom sa pestujú obilniny, okopaniny, krmoviny, technické plodiny, zelenina a iné poľnohospodárske plodiny alebo pozemok dočasne nevyužívaný pre rastlinnú výrobu	 1 - Pozemok využívaný pre rastlinnú výrobu, na ktorom sa pestujú obilniny, okopaniny, krmoviny, technické plodi
 2	 2 - Pozemok vysadený chmeľom alebo pozemok vhodný na pestovanie chmeľu, na ktorom bol chmeľ dočasne odstránený	 2 - Pozemok vysadený chmeľom alebo pozemok vhodný na pestovanie chmeľu, na ktorom bol chmeľ dočasne odstránený
 3	 3 - Pozemok, na ktorom sa pestuje vinič alebo pozemok vhodný na pestovanie viniča, na ktorom bol vinič dočasne odstránený	 3 - Pozemok, na ktorom sa pestuje vinič alebo pozemok vhodný na pestovanie viniča, na ktorom bol vinič dočasne
@@ -3651,9 +3651,9 @@ CREATE TABLE ciselnik.c_pkk (pkk NUMERIC(5), pkk_popis VARCHAR(220), pkk_popis2 
 \.
 COMMIT;
 BEGIN;
-SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.c_drp; SET statement_timeout=0;
-CREATE TABLE ciselnik.c_drp (drp NUMERIC(2), drp_popis VARCHAR(30), drp_popis2 VARCHAR(17));
-\COPY c_drp FROM STDIN
+SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.drp; SET statement_timeout=0;
+CREATE TABLE ciselnik.drp (id NUMERIC(2) PRIMARY KEY, popis VARCHAR(30), popis2 VARCHAR(17));
+\COPY drp FROM STDIN
 2	Orná pôda	Orná pôda
 3	Chmeľnica	Chmeľnica
 4	Vinica	Vinica
@@ -3667,18 +3667,18 @@ CREATE TABLE ciselnik.c_drp (drp NUMERIC(2), drp_popis VARCHAR(30), drp_popis2 V
 \.
 COMMIT;
 BEGIN;
-SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.c_ums; SET statement_timeout=0;
-CREATE TABLE ciselnik.c_ums (ums NUMERIC(3), ums_popis VARCHAR(60));
-\COPY c_ums FROM STDIN
-1	1 - Stavby postavané na zemskom povrchu
-2	2 - Podzemné stavby
-3	3 - Nadzemné stavby
+SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.ums; SET statement_timeout=0;
+CREATE TABLE ciselnik.ums (ums NUMERIC(3) PRIMARY KEY, ums_popis VARCHAR(60));
+\COPY ums FROM STDIN
+1	Stavby postavané na zemskom povrchu
+2	Podzemné stavby
+3	Nadzemné stavby
 \.
 COMMIT;
 BEGIN;
-SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.c_tvl; SET statement_timeout=0;
-CREATE TABLE ciselnik.c_tvl (tvl NUMERIC(3), tvl_popis VARCHAR(80), tvl_popis2 VARCHAR(40));
-\COPY c_tvl FROM STDIN
+SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.tvl; SET statement_timeout=0;
+CREATE TABLE ciselnik.tvl (tvl NUMERIC(3) PRIMARY KEY, popis VARCHAR(80), popis2 VARCHAR(40));
+\COPY tvl FROM STDIN
 0	Vlastník, ktorého miesto trvalého pobytu alebo sídlo sú známe.	0-Vlastník
 1	Správa majetku štátu, kde je vlastníkom Slovenská republika.	1-Správa majetku štátu, kde je vlastníko
 2	Správa majetku obce, kde vlastníkom je obec.	2-Správa majetku obce, kde vlastníkom je
@@ -3690,9 +3690,9 @@ CREATE TABLE ciselnik.c_tvl (tvl NUMERIC(3), tvl_popis VARCHAR(80), tvl_popis2 V
 \.
 COMMIT;
 BEGIN;
-SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.c_don; SET statement_timeout=0;
-CREATE TABLE ciselnik.c_don (don NUMERIC(3), don_popis VARCHAR(120), don_popis2 VARCHAR(110));
-\COPY c_don FROM STDIN
+SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.don; SET statement_timeout=0;
+CREATE TABLE ciselnik.don (don NUMERIC(3) PRIMARY KEY, popis VARCHAR(120), popis2 VARCHAR(110));
+\COPY don FROM STDIN
 100	100 - Chránená nehnuteľnosť	100 - Chránená nehnuteľnosť
 101	101 - Chránená krajinná oblasť	101 - Chránená krajinná oblasť
 102	102 - Národný park	102 - Národný park
@@ -3727,10 +3727,10 @@ CREATE TABLE ciselnik.c_don (don NUMERIC(3), don_popis VARCHAR(120), don_popis2 
 \.
 COMMIT;
 BEGIN;
-SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.c_ump; SET statement_timeout=0;
-CREATE TABLE ciselnik.c_ump (ump NUMERIC(3), ump_popis VARCHAR(60), ump_popis2 VARCHAR(15));
-\COPY c_ump FROM STDIN
-1	1 - Pozemok je umiestnený v zastavanom území obce	1-zastavane
-2	2 - Pozemok je umiestnený mimo zastavaného územia obce	2-mimo zast.
+SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.ump; SET statement_timeout=0;
+CREATE TABLE ciselnik.ump (ump NUMERIC(3) PRIMARY KEY, popis VARCHAR(60), popis2 VARCHAR(15));
+\COPY ump FROM STDIN
+1	Pozemok je umiestnený v zastavanom území obce	1-zastavane
+2	Pozemok je umiestnený mimo zastavaného územia obce	2-mimo zast.
 \.
 COMMIT;
