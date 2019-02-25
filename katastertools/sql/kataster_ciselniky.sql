@@ -3684,7 +3684,6 @@ BEGIN;
 SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.tvl; SET statement_timeout=0;
 CREATE TABLE ciselnik.tvl (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(80), popis2 VARCHAR(40));
 \COPY tvl FROM STDIN
-0 NULL  NULL
 0	Vlastník, ktorého miesto trvalého pobytu alebo sídlo sú známe.	Vlastník
 1	Správa majetku štátu, kde je vlastníkom Slovenská republika.	Správa majetku štátu, kde je vlastníko
 2	Správa majetku obce, kde vlastníkom je obec.	Správa majetku obce, kde vlastníkom je
@@ -3692,6 +3691,8 @@ CREATE TABLE ciselnik.tvl (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(80), popis2 
 4	Vlastník nie je známy.	Vlastník nie je známy.
 5	Evidovaný vlastník, ktorý nemôže do rozhodnutia správneho orgánu s pozemkom nakl	Evidovaný vlastník, ktorý nemôže do ro
 6	Poručiteľ, po ktorom sa prihlásil domnelý dedič alebo dedičia (dedičské konanie.	Poručiteľ, po ktorom sa prihlásil domn
+7 NULL  NULL
+8 NULL  NULL
 9	Duplicitný vlastník	Duplicitný vlastník
 \.
 COMMIT;
