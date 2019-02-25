@@ -2,22 +2,22 @@ BEGIN;
 SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.drv; SET statement_timeout=0;
 CREATE TABLE ciselnik.drv (id NUMERIC(2) PRIMARY KEY, popis VARCHAR(90));
 \COPY drv FROM STDIN
-0 NULL
 1	Oprávnená držba k pozemku
 2	Nájom k pozemku
 3	Spoluvlastníctvo k pozemku pod stavbou
 4	Vlastník pozemku je vlastníkom stavby postavenej na tomto pozemku
 5	Vlastník pozemku nie je vlastníkom stavby postavenej na tomto pozemku (pozemkoch)
 7	Právny vzťah nie je evidovaný v súbore popisných informácií katastra nehnuteľností
-8 NULL
 9	Duplicitné alebo viacnásobné vlastníctvo k tej istej nehnuteľnosti alebo k jej časti
+0 NULL
+6 NULL
+8 NULL
 \.
 COMMIT;
 BEGIN;
 SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.drs; SET statement_timeout=0;
 CREATE TABLE ciselnik.drs (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(100), popis2 VARCHAR(220));
 \COPY drs FROM STDIN
-0 NULL  NULL
 1	Priemyselná budova	Priemyselná budova
 2	Poľnohospodárska budova	Poľnohospodárska budova
 3	Budova železníc a dráh	Budova železníc a dráh
@@ -41,6 +41,7 @@ CREATE TABLE ciselnik.drs (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(100), popis2
 21	Rozostavaná budova	Rozostavaná budova
 22	Polyfunkčná budova	Polyfunkčná budova
 23	Inžinierska stavba	Inžinierska stavba
+0 NULL  NULL
 \.
 COMMIT;
 BEGIN;
@@ -3612,7 +3613,6 @@ BEGIN;
 SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.pkk; SET statement_timeout=0;
 CREATE TABLE ciselnik.pkk (id NUMERIC(5) PRIMARY KEY, popis VARCHAR(220), popis2 VARCHAR(112));
 \COPY pkk FROM STDIN
-0 NULL  NULL
 1	Pozemok využívaný pre rastlinnú výrobu, na ktorom sa pestujú obilniny, okopaniny, krmoviny, technické plodiny, zelenina a iné poľnohospodárske plodiny alebo pozemok dočasne nevyužívaný pre rastlinnú výrobu	Pozemok využívaný pre rastlinnú výrobu, na ktorom sa pestujú obilniny, okopaniny, krmoviny, technické plodi
 2	Pozemok vysadený chmeľom alebo pozemok vhodný na pestovanie chmeľu, na ktorom bol chmeľ dočasne odstránený	Pozemok vysadený chmeľom alebo pozemok vhodný na pestovanie chmeľu, na ktorom bol chmeľ dočasne odstránený
 3	Pozemok, na ktorom sa pestuje vinič alebo pozemok vhodný na pestovanie viniča, na ktorom bol vinič dočasne odstránený	Pozemok, na ktorom sa pestuje vinič alebo pozemok vhodný na pestovanie viniča, na ktorom bol vinič dočasne
@@ -3652,13 +3652,13 @@ CREATE TABLE ciselnik.pkk (id NUMERIC(5) PRIMARY KEY, popis VARCHAR(220), popis2
 37	Pozemok, na ktorom sú skaly, svahy, rokliny, výmole, vysoké medze s krovím alebo kamením a iné plochy, ktoré neposkytujú trvalý úžitok	Pozemok, na ktorom sú skaly, svahy, rokliny, výmole, vysoké medze s krovím alebo kamením a iné plochy, ktor
 38	Pozemok s lesným porastom, dočasne bez lesného porastu za účelom obnovy lesa alebo po vykonaní náhodnej ťažby	Pozemok s lesným porastom, dočasne bez lesného porastu za účelom obnovy lesa alebo po vykonaní náhodnej ťaž
 99	Pozemok využívaný podľa druhu pozemku	Pozemok využívaný podľa druhu pozemku
+0 NULL  NULL
 \.
 COMMIT;
 BEGIN;
 SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.drp; SET statement_timeout=0;
 CREATE TABLE ciselnik.drp (id NUMERIC(2) PRIMARY KEY, popis VARCHAR(30), popis2 VARCHAR(17));
 \COPY drp FROM STDIN
-0 NULL  NULL
 2	Orná pôda	Orná pôda
 3	Chmeľnica	Chmeľnica
 4	Vinica	Vinica
@@ -3669,16 +3669,17 @@ CREATE TABLE ciselnik.drp (id NUMERIC(2) PRIMARY KEY, popis VARCHAR(30), popis2 
 11	Vodná plocha	Vodná plocha
 13	Zastavaná plocha a nádvorie	Zastavaná plocha
 14	Ostatná plocha	Ostatná plocha
+0 NULL  NULL
 \.
 COMMIT;
 BEGIN;
 SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.ums; SET statement_timeout=0;
 CREATE TABLE ciselnik.ums (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(60));
 \COPY ums FROM STDIN
-0 NULL  NULL
 1	Stavby postavané na zemskom povrchu
 2	Podzemné stavby
 3	Nadzemné stavby
+0 NULL  NULL
 \.
 COMMIT;
 BEGIN;
@@ -3692,16 +3693,15 @@ CREATE TABLE ciselnik.tvl (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(80), popis2 
 4	Vlastník nie je známy.	Vlastník nie je známy.
 5	Evidovaný vlastník, ktorý nemôže do rozhodnutia správneho orgánu s pozemkom nakl	Evidovaný vlastník, ktorý nemôže do ro
 6	Poručiteľ, po ktorom sa prihlásil domnelý dedič alebo dedičia (dedičské konanie.	Poručiteľ, po ktorom sa prihlásil domn
+9	Duplicitný vlastník	Duplicitný vlastník
 7 NULL  NULL
 8 NULL  NULL
-9	Duplicitný vlastník	Duplicitný vlastník
 \.
 COMMIT;
 BEGIN;
 SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.don; SET statement_timeout=0;
 CREATE TABLE ciselnik.don (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(120), popis2 VARCHAR(110));
 \COPY don FROM STDIN
-0 NULL  NULL
 100	Chránená nehnuteľnosť	Chránená nehnuteľnosť
 101	Chránená krajinná oblasť	Chránená krajinná oblasť
 102	Národný park	Národný park
@@ -3733,14 +3733,15 @@ CREATE TABLE ciselnik.don (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(120), popis2
 602	Ochranné pásmo geodetického bodu	Ochranné pásmo geodetického bodu
 701	Ochranné pásmo letiska a leteckých pozemných zariadení	Ochranné pásmo letiska a leteckých pozemných zariadení
 801	Iná ochrana	Iná ochrana
+0 NULL  NULL
 \.
 COMMIT;
 BEGIN;
 SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.ump; SET statement_timeout=0;
 CREATE TABLE ciselnik.ump (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(60), popis2 VARCHAR(15));
 \COPY ump FROM STDIN
-0 NULL  NULL
 1	Pozemok je umiestnený v zastavanom území obce	zastavane
 2	Pozemok je umiestnený mimo zastavaného územia obce	mimo zast.
+0 NULL  NULL
 \.
 COMMIT;
