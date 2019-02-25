@@ -3745,3 +3745,14 @@ CREATE TABLE ciselnik.ump (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(60), popis2 
 0 NULL  NULL
 \.
 COMMIT;
+BEGIN;
+SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.tuc; SET statement_timeout=0;
+CREATE TABLE ciselnik.tuc (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(30));
+\COPY ump FROM STDIN
+1	Vlastník
+2	Správca
+3 Nájomca
+4 Iná oprávnená osoba z práv k nehnuteľnosti
+0 NULL
+\.
+COMMIT;
