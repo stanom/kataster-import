@@ -3668,7 +3668,7 @@ CREATE TABLE ciselnik.drp (id NUMERIC(2) PRIMARY KEY, popis VARCHAR(30), popis2 
 COMMIT;
 BEGIN;
 SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.ums; SET statement_timeout=0;
-CREATE TABLE ciselnik.ums (id NUMERIC(3) PRIMARY KEY, ums_popis VARCHAR(60));
+CREATE TABLE ciselnik.ums (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(60));
 \COPY ums FROM STDIN
 1	Stavby postavané na zemskom povrchu
 2	Podzemné stavby
