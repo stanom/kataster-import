@@ -1,3 +1,5 @@
+CREATE SCHEMA IF NOT EXISTS ciselnik ;
+
 BEGIN;
 SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.drv; SET statement_timeout=0;
 CREATE TABLE ciselnik.drv (id NUMERIC(2) PRIMARY KEY, popis VARCHAR(90));
