@@ -154,9 +154,10 @@ IFS=$SAVEIFS
 
 # # # SQL> SELECT (ku || lpad(cpa::text,11,'0')( AS parckey FROM kn_pa;
 # # # BASH> printf "852104%011d" 1234567
-# OK: pri uz a vl su texty obsahujuce "\r\n" -> sed 's/\\r\\n/ /g' {uz,vl}.sql
-# časť skriptu $(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l) môže spôsobovať postupné spomaľovanie, nakoľko, pri každom spracovanom dbf súbore sa zisťuje počet riadkov výsledného súboru, ktorý narastá 
-# # # treba nastaviť špeciálne počítadlo, ktoré si bude zapamätávať poslednú max. hodnotu záznamu
+# OK, ZAPRACOVANÉ: pri uz a vl su texty obsahujuce "\r\n" -> sed 's/\\r\\n/ /g' {uz,vl}.sql
+# OK, ZAPRACOVANÉ: časť skriptu $(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l) môže spôsobovať postupné spomaľovanie, nakoľko, pri každom spracovanom dbf súbore sa zisťuje počet riadkov výsledného súboru, ktorý narastá 
+# # # OK, ZAPRACOVANÉ: treba nastaviť špeciálne počítadlo, ktoré si bude zapamätávať poslednú max. hodnotu záznamu
+# na začiatku spustiť kontrolu verzie 'pgdbf', vyžaduje sa totiž min. '0.6.3'
 
 ### SKUSENOSTI ###
 # pgdbf prekonvertoval hodnotu '8401000000' na '8.401E+10' (stalo sa to pri súbore "vl801411.dbf" z 31.12.2018)
@@ -177,5 +178,6 @@ IFS=$SAVEIFS
 ### CELKOVÉ TRVANIE spracovania DBF súborov celoslovenských katastrálnych dát: 21min. 48s. ###
 ##############################################################################################
 
+### BUG-y ###
 # pgdbf -P -T -s 'cp852' -C -D -E -r -i 'idu,poz' -m /mnt/tmp/kataster-import/data/dbf/pv812129.fpt /mnt/tmp/kataster-import/data/dbf/pv812129.dbf 
 # # # Segmentation fault
