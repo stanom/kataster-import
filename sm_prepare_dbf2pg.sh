@@ -153,6 +153,18 @@ for typ in "${dbf_typy[@]}"; do
 done
 IFS=$SAVEIFS
 
+### PO ZBEHNUTÍ TOHOTO SKRIPTU BY MALO NASLEDOVAT ###
+#pred=$(date); PGOPTIONS="-c search_path=kataster,public" psql -p 5432 -h 127.0.0.1 -U postgres -d kataster -f data/sql_p/bp.sql &&echo -e "${pred}\n`date`" 
+#pred=$(date); PGOPTIONS="-c search_path=kataster,public" psql -p 5432 -h 127.0.0.1 -U postgres -d kataster -f data/sql_p/cs.sql &&echo -e "${pred}\n`date`" 
+#pred=$(date); PGOPTIONS="-c search_path=kataster,public" psql -p 5432 -h 127.0.0.1 -U postgres -d kataster -f data/sql_p/ep.sql &&echo -e "${pred}\n`date`" 
+#pred=$(date); PGOPTIONS="-c search_path=kataster,public" psql -p 5432 -h 127.0.0.1 -U postgres -d kataster -f data/sql_p/lv.sql &&echo -e "${pred}\n`date`" 
+#pred=$(date); PGOPTIONS="-c search_path=kataster,public" psql -p 5432 -h 127.0.0.1 -U postgres -d kataster -f data/sql_p/pa.sql &&echo -e "${pred}\n`date`" 
+#pred=$(date); PGOPTIONS="-c search_path=kataster,public" psql -p 5432 -h 127.0.0.1 -U postgres -d kataster -f data/sql_p/pk.sql &&echo -e "${pred}\n`date`" 
+#pred=$(date); PGOPTIONS="-c search_path=kataster,public" psql -p 5432 -h 127.0.0.1 -U postgres -d kataster -f data/sql_p/pv.sql &&echo -e "${pred}\n`date`" 
+#pred=$(date); PGOPTIONS="-c search_path=kataster,public" psql -p 5432 -h 127.0.0.1 -U postgres -d kataster -f data/sql_p/uz.sql &&echo -e "${pred}\n`date`" 
+#pred=$(date); PGOPTIONS="-c search_path=kataster,public" psql -p 5432 -h 127.0.0.1 -U postgres -d kataster -f data/sql_p/vl.sql &&echo -e "${pred}\n`date`" 
+
+
 ### TODO ###
 # identifikovanie numerickych stlpcov, vhodnych na indexovanie:
 # # # dbf_dump --info ${f} |grep '^[1-9]' | grep -P '\sN\s' |awk '{print $2}'
