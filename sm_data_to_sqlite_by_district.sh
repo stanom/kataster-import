@@ -1,6 +1,7 @@
 #!/bin/bash
 # skript pre konvert psql kat. dát do sqlite, podľa okresov
 # prihlasovacie údaje pre psql sa načítavajú z ~/.pgpass
+# spustenie: './sm_data_to_sqlite_by_district.sh'
 
 ### PREMENNE ###
 OUTPUT_DIR="/tmp" 
