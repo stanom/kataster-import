@@ -8,6 +8,12 @@
 
 set -e
 
+# kontrola min. požadovanej verzie 'pgdbf' 0.6.3
+if [ $(expr `man pgdbf |grep -i '^version' |awk '{print $2}' |sed 's/\.//g'` + 0) -lt "63" ]; then
+    echo -e "minimálne požadovaná verzia PGDBF je 0.6.3"
+    exit 0;
+fi
+
 ROOT_DIR="$(readlink -e $1)"
 cd "$ROOT_DIR"
 INPUT_DIR="$ROOT_DIR/dbf"
@@ -157,7 +163,7 @@ IFS=$SAVEIFS
 # OK, ZAPRACOVANÉ: pri uz a vl su texty obsahujuce "\r\n" -> sed 's/\\r\\n/ /g' {uz,vl}.sql
 # OK, ZAPRACOVANÉ: časť skriptu $(grep ^[0-9] ${OUTPUT_DIR}/${typ}.sql |wc -l) môže spôsobovať postupné spomaľovanie, nakoľko, pri každom spracovanom dbf súbore sa zisťuje počet riadkov výsledného súboru, ktorý narastá 
 # # # OK, ZAPRACOVANÉ: treba nastaviť špeciálne počítadlo, ktoré si bude zapamätávať poslednú max. hodnotu záznamu
-# na začiatku spustiť kontrolu verzie 'pgdbf', vyžaduje sa totiž min. '0.6.3'
+# OK, ZAPRACOVANÉ: na začiatku spustiť kontrolu verzie 'pgdbf', vyžaduje sa totiž min. '0.6.3'
 
 ### SKUSENOSTI ###
 # pgdbf prekonvertoval hodnotu '8401000000' na '8.401E+10' (stalo sa to pri súbore "vl801411.dbf" z 31.12.2018)
