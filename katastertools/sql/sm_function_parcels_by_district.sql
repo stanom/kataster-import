@@ -1,19 +1,19 @@
 -- ### FUNCTION parcels_by_district(int, int, '[c|e]') ###
 -- funkcia pre generovanie parcelného stavu '[c|e]' podľa okresov
 -- # Príklad: "SELECT parcels_by_district(600, 700, 'c') ;" generuje tabuľky s parc. stavom 'c'  v schéme 'public' okresov 60x:
--- # # # public.kn_c_okres_601
--- # # # public.kn_c_okres_602
--- # # # public.kn_c_okres_603
--- # # # public.kn_c_okres_604
--- # # # public.kn_c_okres_605
--- # # # public.kn_c_okres_606
--- # # # public.kn_c_okres_607
--- # # # public.kn_c_okres_608
--- # # # public.kn_c_okres_609
--- # # # public.kn_c_okres_610
--- # # # public.kn_c_okres_611
--- # # # public.kn_c_okres_612
--- # # # public.kn_c_okres_613
+-- # # # public.kn_c_okres_601 --COMMENT: 'Parcely C v okrese Banská Bystrica'
+-- # # # public.kn_c_okres_602 --COMMENT: 'Parcely C v okrese Banská Štiavnica'
+-- # # # public.kn_c_okres_603 --COMMENT: 'Parcely C v okrese Brezno'
+-- # # # public.kn_c_okres_604 --COMMENT: 'Parcely C v okrese Detva'
+-- # # # public.kn_c_okres_605 --COMMENT: 'Parcely C v okrese Krupina'
+-- # # # public.kn_c_okres_606 --COMMENT: 'Parcely C v okrese Lučenec'
+-- # # # public.kn_c_okres_607 --COMMENT: 'Parcely C v okrese Poltár'
+-- # # # public.kn_c_okres_608 --COMMENT: 'Parcely C v okrese Revúca'
+-- # # # public.kn_c_okres_609 --COMMENT: 'Parcely C v okrese Rimavská Sobota'
+-- # # # public.kn_c_okres_610 --COMMENT: 'Parcely C v okrese Veľký Krtíš'
+-- # # # public.kn_c_okres_611 --COMMENT: 'Parcely C v okrese Zvolen'
+-- # # # public.kn_c_okres_612 --COMMENT: 'Parcely C v okrese Žarnovica'
+-- # # # public.kn_c_okres_613 --COMMENT: 'Parcely C v okrese Žiar nad Hronom'
 
 
 SET search_path TO kataster,ciselnik,public ;
