@@ -10,6 +10,10 @@
 -- # # # public.kn_c_okres_607
 -- # # # public.kn_c_okres_608
 -- # # # public.kn_c_okres_609
+-- # # # public.kn_c_okres_610
+-- # # # public.kn_c_okres_611
+-- # # # public.kn_c_okres_612
+-- # # # public.kn_c_okres_613
 
 
 SET search_path TO kataster,ciselnik,public ;
