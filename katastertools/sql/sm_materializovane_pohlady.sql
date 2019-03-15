@@ -122,10 +122,10 @@ SELECT NOW();
 -- ### vlastníci, správcovia, nájomcovia v samostatných stĺpcoch
 CREATE MATERIALIZED VIEW kataster."SK_KN_C"  AS
   SELECT
-    utj.cislo_okresu
-    ,COALESCE(utj.nazov_okresu,'') AS nazov_okresu
+    utj.okres
+    ,COALESCE(utj.okres_nazov,'') AS nazov_okresu
     ,p.ku
-    ,COALESCE(utj.nazov_ku,'') AS nazov_ku
+    ,COALESCE(utj.ku_nazov,'') AS nazov_ku
 --    ,p.parckey
     ,COALESCE(kl.parcela,'') AS parcela
     ,p.cpa
@@ -151,17 +151,17 @@ CREATE MATERIALIZED VIEW kataster."SK_KN_C"  AS
 --    ,kl.geom
   FROM kataster.kn_pa p
      INNER JOIN ciselnik.ump csl_ump ON(csl_ump.id=p.ump)
-     LEFT JOIN public.adresar utj ON p.ku = utj.cislo_ku::numeric
+     LEFT JOIN ciselnik.kataster utj ON p.ku = utj.ku::numeric
      LEFT JOIN kataster.kn_kladpar kl ON p.parckey::text = kl.parckey::text
      LEFT JOIN kataster.kn_vl v ON p.ku = v.ku AND p.clv = v.clv
      LEFT JOIN kataster.kn_uz u ON p.ku = u.ku AND p.cel = u.cel
   WHERE 1=1
 --AND p.ku=852104 AND p.clv=2360 AND p.cpa=14830010
   GROUP BY
-    utj.cislo_okresu
-    ,utj.nazov_okresu
+    utj.okres
+    ,utj.okres_nazov
     ,p.ku
-    ,utj.nazov_ku
+    ,utj.ku_nazov
 --    ,p.parckey
     ,kl.parcela
     ,p.cpa
@@ -181,3 +181,4 @@ SELECT NOW();
 REFRESH MATERIALIZED VIEW kataster."SK_KN_C";
 SELECT NOW();
 VACUUM kataster."SK_KN_C";
+-- >> 7967330 riadkov; za 16min. 45s.
