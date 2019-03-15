@@ -48,7 +48,7 @@ CREATE TABLE ciselnik.drs (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(100), popis2
 COMMIT;
 BEGIN;
 SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.kataster; SET statement_timeout=0;
-CREATE TABLE ciselnik.kataster (ku_nazov VARCHAR(70), kataster NUMERIC(6) UNIQUE, okr_nazov VARCHAR(70), okres NUMERIC(3), ku_nazov_u VARCHAR(70));
+CREATE TABLE ciselnik.kataster (ku_nazov VARCHAR(70), ku NUMERIC(6) UNIQUE, okres_nazov VARCHAR(70), okres NUMERIC(3), ku_nazov_u VARCHAR(70));
 \COPY kataster FROM STDIN
 Borinka	803693	Malacky	106	BORINKA_803693_MALACKY
 Vačková	803707	Malacky	106	VACKOVA_803707_MALACKY
