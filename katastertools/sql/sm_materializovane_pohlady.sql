@@ -1,125 +1,9 @@
 -- Materializované pohľady nad importovanými kat. dátami
 
-
--- ###################################################### --
--- ### materializovaný náhľadu reg_C_vla_uzi - 1. nástrel
-SELECT NOW();
-CREATE MATERIALIZED VIEW kataster."reg_C_vla_uzi" AS
-  SELECT
-    utj.okres AS cislo_okresu
-    ,utj.okr_nazov AS nazov_okresu
-    ,p.ku
-    ,utj.ku_nazov AS nazov_ku
---    ,p.parckey
-    ,kl.parcela
-    ,p.cpa
-    ,p.drp
-    ,p.vym
-    ,p.don
-    ,p.clv
-    ,count(v.vla) AS pocet_vlastnikov
---    ,string_agg(DISTINCT (((v.cit::text || chr(47)) || v.men::text) || ' - '::text) || v.vla::text, chr(10)) AS vlastnici
-    ,string_agg("v".pcs::text || E'. [' || "v".vla::text || E' {' || "v".cit::text || E'/' || "v".men::text || E'}]' , E'\n' ORDER BY "v".pcs::numeric) AS vlastnici
-    ,p.cel
-    ,count(DISTINCT u.uzi::text) AS pocet_uzivatelov
---    ,string_agg(DISTINCT u.uzi::text, chr(10)) AS uzivatelia
-    ,string_agg(DISTINCT E'[' || "u".uzi::text || E']', E'\n') AS uzivatelia
-    ,kl.gid
---    ,kl.geom
-  FROM kn_pa p
-     JOIN ciselnik.kataster utj ON p.ku = utj.kataster::numeric
-     LEFT JOIN kn_kladpar kl ON p.parckey::text = kl.parckey::text
-     LEFT JOIN kn_vl v ON p.ku = v.ku AND p.clv = v.clv
-     LEFT JOIN kn_uz u ON p.ku = u.ku AND p.cel = u.cel
-  WHERE 1=1
-  GROUP BY
-    utj.okres
-    ,utj.okr_nazov
-    ,p.ku
-    ,utj.ku_nazov
---    ,p.parckey
-    ,kl.parcela
-    ,p.
-    ,p.drp
-    ,p.vym
-    ,p.don
-    ,p.clv
-    ,p.cel
-    ,kl.gid
-WITH NO DATA;
-CREATE INDEX IF NOT EXISTS "idx_reg_C_vla_uzi_ku" ON "reg_C_vla_uzi"(ku);
-CREATE INDEX IF NOT EXISTS "idx_reg_C_vla_uzi_cislo_okresu" ON "reg_C_vla_uzi"(cislo_okresu);
-CREATE INDEX IF NOT EXISTS "idx_reg_C_vla_uzi_gid" ON "reg_C_vla_uzi"(gid);
-SELECT NOW();
-REFRESH MATERIALIZED VIEW "reg_C_vla_uzi" ;
-SELECT NOW();
-
-
-
--- ###################################################### --
--- ### materializovaný náhľadu reg_C_vla_uzi - 2. nástrel
-CREATE MATERIALIZED VIEW kataster."reg_C_vla_uzi_2" AS
-  SELECT
-    utj.okres AS cislo_okresu
-    ,utj.okr_nazov AS nazov_okresu
-    ,p.ku
-    ,utj.ku_nazov AS nazov_ku
---    ,p.parckey
-    ,kl.parcela
-    ,p.cpa
-    ,csl_ump.popis2 AS ump
-    ,p.drp
-    ,p.vym
-    ,p.don
-    ,p.clv
-    ,count(v.vla) AS pocet_vlastnikov
---    ,string_agg(DISTINCT (((v.cit::text || chr(47)) || v.men::text) || ' - '::text) || v.vla::text, chr(10)) AS vlastnici
--- rýchly spôsob (14 minút) >>>
-    ,string_agg(CASE WHEN "v".tuc=1 THEN E'[' || "v".vla::text || E' {' || "v".cit::text || E'/' || "v".men::text || E'}]' END , E'\n' ORDER BY "v".pcs::numeric) AS vlastnici
--- pomalý spôsob (niekoľko hodín) >>>
---    ,array_to_string(array(    SELECT pcs::text || E'. [' || vla::text || E' {' || cit::text || E'/' || men::text || E'}]' FROM kataster.kn_vl sub_v INNER JOIN ciselnik.tuc tuc ON(tuc.id=sub_v.tuc) WHERE (1=1 AND "sub_v".ku = p.ku AND "sub_v".clv = p.clv AND tuc.id=1) ), E'\r\n') AS vlastnici
-    ,p.cel
-    ,count(DISTINCT u.uzi::text) AS pocet_uzivatelov
---    ,string_agg(DISTINCT u.uzi::text, chr(10)) AS uzivatelia
-    ,string_agg(DISTINCT E'[' || "u".uzi::text || E']', E'\n') AS uzivatelia
-    ,kl.gid
---    ,kl.geom
-  FROM kataster.kn_pa p
-     INNER JOIN ciselnik.ump csl_ump ON(csl_ump.id=p.ump)
-     LEFT JOIN ciselnik.kataster utj ON p.ku = utj.kataster::numeric
-     LEFT JOIN kataster.kn_kladpar kl ON p.parckey::text = kl.parckey::text
-     LEFT JOIN kataster.kn_vl v ON p.ku = v.ku AND p.clv = v.clv
-     LEFT JOIN kataster.kn_uz u ON p.ku = u.ku AND p.cel = u.cel
-  WHERE 1=1
---AND p.ku=852104 AND p.clv=2360 AND p.cpa=14830010
-  GROUP BY
-    utj.okres
-    ,utj.okr_nazov
-    ,p.ku
-    ,utj.ku_nazov
---    ,p.parckey
-    ,kl.parcela
-    ,p.cpa
-    ,csl_ump.popis2
-    ,p.drp
-    ,p.vym
-    ,p.don
-    ,p.clv
-    ,p.cel
-    ,kl.gid
-WITH NO DATA;
-CREATE INDEX IF NOT EXISTS "idx_reg_C_vla_uzi_2_ku" ON kataster."reg_C_vla_uzi_2"(ku);
-CREATE INDEX IF NOT EXISTS "idx_reg_C_vla_uzi_2_cislo_okresu" ON kataster."reg_C_vla_uzi_2"(cislo_okresu);
-CREATE INDEX IF NOT EXISTS "idx_reg_C_vla_uzi_2_gid" ON kataster."reg_C_vla_uzi_2"(gid);
-SELECT NOW();
-REFRESH MATERIALIZED VIEW kataster."reg_C_vla_uzi_2";
-SELECT NOW();
-
-
-
 -- ###################################################### --
 -- ### FINÁLNY materializovaný náhľad "SK_KN_C"
 -- ### vlastníci, správcovia, nájomcovia v samostatných stĺpcoch
+SELECT NOW();
 CREATE MATERIALIZED VIEW kataster."SK_KN_C"  AS
   SELECT
     utj.okres
@@ -134,27 +18,29 @@ CREATE MATERIALIZED VIEW kataster."SK_KN_C"  AS
     ,p.vym
     ,p.don
     ,p.clv
---    ,count(v.vla) AS pocet_vlastnikov
-    ,concat(count(*) filter (where "v".tuc=1)) AS pocet_vlastnikov
---    ,string_agg(DISTINCT (((v.cit::text || chr(47)) || v.men::text) || ' - '::text) || v.vla::text, chr(10)) AS vlastnici
+--    ,COUNT(v.vla) AS pocet_vlastnikov
+    ,CONCAT(COUNT(*) FILTER (WHERE "v".tuc=1)) AS pocet_vlastnikov
+--    ,STRING_AGG(DISTINCT (((v.cit::text || CHR(47)) || v.men::text) || ' - '::text) || v.vla::text, CHR(10)) AS vlastnik
 -- rýchly spôsob (14 minút) >>>
-    ,COALESCE(string_agg(CASE WHEN "v".tuc=1 THEN E'[' || "v".vla::text || E' {' || "v".cit::text || E'/' || "v".men::text || E'}]' END , E'\n' ORDER BY "v".pcs::numeric),'') AS vlastnik
-    ,COALESCE(string_agg(CASE WHEN "v".tuc=2 THEN E'[' || "v".vla::text || E' {' || "v".cit::text || E'/' || "v".men::text || E'}]' END , E'\n' ORDER BY "v".pcs::numeric),'') AS spravca
-    ,COALESCE(string_agg(CASE WHEN "v".tuc=3 THEN E'[' || "v".vla::text || E' {' || "v".cit::text || E'/' || "v".men::text || E'}]' END , E'\n' ORDER BY "v".pcs::numeric),'') AS najomca
+    ,COALESCE(STRING_AGG(CASE WHEN "v".tuc=1 AND "v".cit>0 AND "v".men>0 THEN E'[' || "v".vla::text || E' {' || "v".cit::text || E'/' || "v".men::text || E'}]' END , E'\n' /*ORDER BY "v".pcs::numeric*/),'') AS vlastnik
+    ,COALESCE(STRING_AGG(CASE WHEN "v".tuc=2 THEN E'[' || "v".vla::text || E' {' || "v".cit::text || E'/' || "v".men::text || E'}]' END , E'\n' /*ORDER BY "v".pcs::numeric*/),'') AS spravca
+    ,COALESCE(STRING_AGG(CASE WHEN "v".tuc=3 THEN E'[' || "v".vla::text || E' {' || "v".cit::text || E'/' || "v".men::text || E'}]' END , E'\n' /*ORDER BY "v".pcs::numeric*/),'') AS najomca
 -- pomalý spôsob (niekoľko hodín) >>>
---    ,array_to_string(array(    SELECT pcs::text || E'. [' || vla::text || E' {' || cit::text || E'/' || men::text || E'}]' FROM kataster.kn_vl sub_v INNER JOIN ciselnik.tuc tuc ON(tuc.id=sub_v.tuc) WHERE (1=1 AND "sub_v".ku = p.ku AND "sub_v".clv = p.clv AND tuc.id=1) ), E'\r\n') AS vlastnici
+--    ,ARRAY_TO_STRING(array(SELECT pcs::text || E'. [' || vla::text || E' {' || cit::text || E'/' || men::text || E'}]' FROM kataster.kn_vl sub_v INNER JOIN ciselnik.tuc tuc ON(tuc.id=sub_v.tuc) WHERE (1=1 AND "sub_v".ku = p.ku AND "sub_v".clv = p.clv AND tuc.id=1) ), E'\r\n') AS vlastnik
     ,p.cel
-    ,count(DISTINCT u.uzi::text) AS pocet_uzivatelov
---    ,string_agg(DISTINCT u.uzi::text, chr(10)) AS uzivatelia
-    ,COALESCE(string_agg(DISTINCT E'[' || "u".uzi::text || E']', E'\n'),'') AS uzivatelia
+    ,COUNT(DISTINCT u.uzi::text) AS pocet_uzivatelov
+--    ,STRING_AGG(DISTINCT u.uzi::text, CHR(10)) AS uzivatel
+    ,COALESCE(STRING_AGG(DISTINCT E'[' || "u".uzi::text || E']', E'\n'),'') AS uzivatel
     ,kl.gid
 --    ,kl.geom
   FROM kataster.kn_pa p
      INNER JOIN ciselnik.ump csl_ump ON(csl_ump.id=p.ump)
      LEFT JOIN ciselnik.kataster utj ON p.ku = utj.ku::numeric
      LEFT JOIN kataster.kn_kladpar kl ON p.parckey::text = kl.parckey::text
-     LEFT JOIN kataster.kn_vl v ON p.ku = v.ku AND p.clv = v.clv
-     LEFT JOIN kataster.kn_uz u ON p.ku = u.ku AND p.cel = u.cel
+--     LEFT JOIN kataster.kn_vl v ON p.ku = v.ku AND p.clv = v.clv
+     LEFT JOIN kataster.kn_vl_unique v ON p.ku = v.ku AND p.clv = v.clv
+--     LEFT JOIN kataster.kn_uz u ON p.ku = u.ku AND p.cel = u.cel
+     LEFT JOIN kataster.kn_uz_unique u ON p.ku = u.ku AND p.cel = u.cel
   WHERE 1=1
 --AND p.ku=852104 AND p.clv=2360 AND p.cpa=14830010
   GROUP BY
@@ -174,7 +60,7 @@ CREATE MATERIALIZED VIEW kataster."SK_KN_C"  AS
     ,kl.gid
 WITH NO DATA;
 CREATE INDEX IF NOT EXISTS "idx_SK_KN_C_ku" ON kataster."SK_KN_C"(ku);
-CREATE INDEX IF NOT EXISTS "idx_SK_KN_C_cislo_okresu" ON kataster."SK_KN_C"(cislo_okresu);
+CREATE INDEX IF NOT EXISTS "idx_SK_KN_C_okres" ON kataster."SK_KN_C"(okres);
 CREATE INDEX IF NOT EXISTS "idx_SK_KN_C_gid" ON kataster."SK_KN_C"(gid);
 VACUUM kataster."SK_KN_C";
 SELECT NOW();
@@ -182,3 +68,69 @@ REFRESH MATERIALIZED VIEW kataster."SK_KN_C";
 SELECT NOW();
 VACUUM kataster."SK_KN_C";
 -- >> 7967330 riadkov; za 16min. 45s.
+
+SELECT pg_size_pretty(pg_relation_size('kataster."SK_KN_C"'));
+
+-- ###################################################### --
+-- ### FINÁLNY materializovaný náhľad "SK_KN_E"
+-- ### vlastníci, správcovia, nájomcovia v samostatných stĺpcoch
+SELECT NOW();
+CREATE MATERIALIZED VIEW kataster."SK_KN_E" AS
+  SELECT
+    utj.okres
+    ,COALESCE(utj.okres_nazov,'') AS nazov_okresu
+    ,p.ku
+    ,COALESCE(utj.ku_nazov,'') AS nazov_ku
+--    ,p.parckey
+    ,COALESCE(kl.parcela,'') AS parcela
+    ,p.cpa
+    ,COALESCE(csl_ump.popis2,'') AS ump
+    ,p.drp
+    ,p.vym
+    ,p.don
+    ,p.clv
+--    ,COUNT(v.vla) AS pocet_vlastnikov
+    ,CONCAT(COUNT(*) FILTER (WHERE "v".tuc=1 AND "v".cit>0 AND "v".men>0))::numeric AS pocet_vlastnikov
+    ,COALESCE(STRING_AGG(E'[' || "v".vla::text || E' {' || "v".cit::text || E'/' || "v".men::text || E'}]' , E'\n') FILTER (WHERE "v".tuc=1 AND "v".cit>0 AND "v".men>0),'') AS vlastnik
+    ,p.cel
+    ,COUNT(DISTINCT u.uzi::text) AS pocet_uzivatelov
+--    ,STRING_AGG(DISTINCT u.uzi::text, CHR(10)) AS uzivatel
+    ,COALESCE(STRING_AGG(DISTINCT E'[' || "u".uzi::text || E']', E'\n'),'') AS uzivatel
+    ,kl.gid
+--    ,kl.geom
+  FROM kataster.kn_ep p
+     INNER JOIN ciselnik.ump csl_ump ON(csl_ump.id=p.ump)
+     LEFT JOIN ciselnik.kataster utj ON p.ku = utj.ku::numeric
+     LEFT JOIN kataster.kn_uov kl ON p.parckey::text = kl.parckey::text
+--     LEFT JOIN kataster.kn_vl v ON p.ku = v.ku AND p.clv = v.clv
+     LEFT JOIN kataster.kn_vl_unique v ON p.ku = v.ku AND p.clv = v.clv
+--     LEFT JOIN kataster.kn_uz u ON p.ku = u.ku AND p.cel = u.cel
+     LEFT JOIN kataster.kn_uz_unique u ON p.ku = u.ku AND p.cel = u.cel
+  WHERE 1=1
+  GROUP BY
+    utj.okres
+    ,utj.okres_nazov
+    ,p.ku
+    ,utj.ku_nazov
+--    ,p.parckey
+    ,kl.parcela
+    ,p.cpa
+    ,csl_ump.popis2
+    ,p.drp
+    ,p.vym
+    ,p.don
+    ,p.clv
+    ,p.cel
+    ,kl.gid
+WITH NO DATA;
+CREATE INDEX IF NOT EXISTS "idx_SK_KN_E_ku" ON kataster."SK_KN_E"(ku);
+CREATE INDEX IF NOT EXISTS "idx_SK_KN_E_okres" ON kataster."SK_KN_E"(okres);
+CREATE INDEX IF NOT EXISTS "idx_SK_KN_E_gid" ON kataster."SK_KN_E"(gid);
+VACUUM kataster."SK_KN_E";
+SELECT NOW();
+REFRESH MATERIALIZED VIEW kataster."SK_KN_E";
+SELECT NOW();
+VACUUM kataster."SK_KN_E";
+-- >> 8199522 riadkov; za 42min. 10s.
+
+SELECT pg_size_pretty(pg_relation_size('kataster."SK_KN_E"'));
