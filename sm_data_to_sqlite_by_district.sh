@@ -27,8 +27,14 @@ sql_data()
            -sql "`echo "${s}"`" \
                -dsco SPATIALITE=YES \
                -nln "okres_${o}" \
+               -nlt "MULTIPOLYGON" \
     && 7z a -bso0 ${OUTPUT_DIR}/kn_okres_${o}.sqlite.7z ${OUTPUT_DIR}/kn_okres_${o}.sqlite \
       && rm -f ${OUTPUT_DIR}/kn_okres_${o}.sqlite \
       && echo -en "\rkn_okres_${o} - OK" 
 done
 date
+
+# BUGS:
+# 2019-04-23: E-parcely (BratislavaIV, BratislavaV) sa natiahnu v Qgise len ako tybuľky
+# # Problém: geometrie boli dvojakého typu "Polygon" a "Multipolygon"
+# # # Oprava: pridávam parameter '-nlt "MULTIPOLYGON"'
