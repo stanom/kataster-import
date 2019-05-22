@@ -10,8 +10,8 @@ PG_HOST="127.0.0.1"
 PG_PORT="5432" 
 PG_USER="postgres" 
 PG_DB="kataster" 
-PG_SQL="SELECT DISTINCT okres FROM ciselnik.\"kataster\" WHERE 1=1 AND okres IN(603) ORDER BY okres ;" 
-#PG_SQL="SELECT DISTINCT okres FROM ciselnik.\"kataster\" WHERE 1=1 ORDER BY okres ;" 
+#PG_SQL="SELECT DISTINCT okres FROM ciselnik.\"kataster\" WHERE 1=1 AND okres IN(603) ORDER BY okres ;" 
+PG_SQL="SELECT DISTINCT okres FROM ciselnik.\"kataster\" WHERE 1=1 ORDER BY okres ;" 
 
 if [ "$1" == "ArcMap" ] || [ "$1" == "Qgis" ]; then
   GIS_APP="$1"
