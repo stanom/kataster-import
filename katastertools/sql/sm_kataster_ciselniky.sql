@@ -3750,11 +3750,27 @@ COMMIT;
 BEGIN;
 SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.tuc; SET statement_timeout=0;
 CREATE TABLE ciselnik.tuc (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(30));
-\COPY ump FROM STDIN
+\COPY tuc FROM STDIN
 1	Vlastník
 2	Správca
 3 Nájomca
 4 Iná oprávnená osoba z práv k nehnuteľnosti
 0 NULL
+\.
+COMMIT;
+--
+-- SM, 06.06.2019, číselník "DRU"; zdroj: https://www.crz.gov.sk/index.php?ID=603&doc=3261571&text=1
+BEGIN;
+SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.dru; SET statement_timeout=0;
+CREATE TABLE ciselnik.dru (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(30));
+\COPY dru FROM STDIN
+1	Štátny
+2	Obecný
+3 Vyšší územný celok
+4 Cirkevný
+5 Súkromný - fyzické osoby
+6 Súkromný - právnické osoby
+7 Slovenský pozemkový fond
+8 Lesy Slovenskej republiky\nLesopoľnohospodársky majetok Ulič\nŠtátne lesy TANAP-u
 \.
 COMMIT;
