@@ -9,7 +9,8 @@
 set -e
 
 # kontrola min. požadovanej verzie 'pgdbf' 0.6.3
-if [ $(expr `man pgdbf |grep -i '^version' |awk '{print $2}' |sed 's/\.//g'` + 0) -lt "63" ]; then
+#if [ $(expr `man pgdbf |grep -i '^version' |awk '{print $2}' |sed 's/\.//g'` + 0) -lt "63" ]; then
+if [ $(expr `pgdbf -h |grep '^PgDBF' |awk '{print $2}' |sed 's/\.//g'` + 0) -lt "63" ]; then
     echo -e "minimálne požadovaná verzia PGDBF je 0.6.3"
     exit 0;
 fi
