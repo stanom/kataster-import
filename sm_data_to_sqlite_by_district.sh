@@ -5,7 +5,7 @@
 # spustenie: './sm_data_to_sqlite_by_district.sh "Qgis" "c" ["EPSG:4326"]'
 
 ### PREMENNE ###
-OUTPUT_DIR="/tmp"
+OUTPUT_DIR="/var/tmp"
 PG_HOST="127.0.0.1" 
 PG_PORT="5432" 
 PG_USER="postgres" 
@@ -62,6 +62,7 @@ sql_data()
                -nlt "MULTIPOLYGON" \
                `[[ ${SRS} != "" ]] && echo "-t_srs ${SRS}"` \
                `[[ ${GIS_APP} != "Qgis" ]] && echo "-a_srs NULL"` \
+    && [[ ${GIS_APP} != "Qgis" ]] && sqlite3 -batch ${OUTPUT_DIR}/${OUTPUT_FILE} "UPDATE geometry_columns SET srid=-1;" \
     && 7z a -bso0 ${OUTPUT_DIR}/${OUTPUT_FILE}.7z ${OUTPUT_DIR}/${OUTPUT_FILE} \
       && rm -f ${OUTPUT_DIR}/${OUTPUT_FILE} \
       && echo -en "\rokres_${f} - OK" 
@@ -74,3 +75,5 @@ date
 # # # Oprava: pridávam parameter '-nlt "MULTIPOLYGON"'
 # 2019-05-22: súradnicový systém 'EPSG:5514' sa v ArcMAP nezobrazuje dobre
 # # # Oprava: pridávam parameter '-a_srs NULL' - pre ArcMap exporty
+# 2019-10-07: '-a_srs NULL' - pre ArcMap exporty neprináša požadovaný efekt, ostáva nastavený súr. systém 'EPSG:5514'
+# # # Oprava: využitie aplikácie 'sqlite3' -> 'sqlite3 -batch ${OUTPUT_DIR}/${OUTPUT_FILE} "UPDATE geometry_columns SET srid=-1;"'
