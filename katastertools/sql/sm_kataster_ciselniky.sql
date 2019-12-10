@@ -3774,3 +3774,25 @@ CREATE TABLE ciselnik.dru (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(30));
 8 Lesy Slovenskej republiky\nLesopoľnohospodársky majetok Ulič\nŠtátne lesy TANAP-u
 \.
 COMMIT;
+--
+-- SM, 10.12.2019, číselník "SEK"; zdroj: Milan O.: "V tabulke UZ je parameter SEK, ktory obsahuje ciselne hodnoty odpovedajuce druhu vlastnictva s jeho blizsim urcenim. POZOR !!! je len informativna, pretoze tabulka UZxxxxxx.DBF nie je od roku 2008 aktualizovana."
+BEGIN;
+SET statement_timeout=60000; DROP TABLE IF EXISTS ciselnik.sek; SET statement_timeout=0;
+CREATE TABLE ciselnik.sek (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(100), popis2 VARCHAR(220));
+\COPY sek FROM STDIN
+1	štátne	štátne majetky
+5	štátne	školské majetky
+8	štátne	štátne podniky a organizácie lesného hospodárstva
+13	štátne	vojenské lesy a majetky vo vojenských obvodoch
+15	miest a obcí	majetok obcí
+16	poľnohospodárske organizácie	poľnohospodárske družstvá
+17	poľnohospodárske organizácie	záhumienky poľnohospodárskych družstiev
+18	súkromné	akciové a ďalšie spoločnosti, ostatné podniky súkromného sektora
+19	súkromné	samostatne hospodáriace fyzické osoby
+20	cirkevné	majetok cirkví
+21	súkromné	fyzické a právnické osoby
+22	spoločnosti urbárske	spoločné majetky (urbariáty, komposesoráty, atď)
+30	iní vlastníci	Slovenský pozemkový fond
+31	spoločnosti ostatné	ostatné podniky, organizácie, ústavy, hospodárstva
+\.
+COMMIT;
