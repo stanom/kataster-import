@@ -3810,14 +3810,14 @@ https://www.slov-lex.sk/pravne-predpisy/SK/ZZ/2009/9/#paragraf-36';
 
 COPY okres_ecv (okres_kod, okres_nazov, ecv) FROM stdin;
 301	Bánovce nad Bebravou	BN
-601	Banská Bystrica	BB, BC, BK
+601	Banská Bystrica	BB,BC,BK
 602	Banská Štiavnica	BS
 701	Bardejov	BJ
-101	Bratislava I	BA, BL, BT, BD, BE, BI
-102	Bratislava II	BA, BL, BT, BD, BE, BI
-103	Bratislava III	BA, BL, BT, BD, BE, BI
-104	Bratislava IV	BA, BL, BT, BD, BE, BI
-105	Bratislava V	BA, BL, BT, BD, BE, BI
+101	Bratislava I	BA,BL,BT,BD,BE,BI
+102	Bratislava II	BA,BL,BT,BD,BE,BI
+103	Bratislava III	BA,BL,BT,BD,BE,BI
+104	Bratislava IV	BA,BL,BT,BD,BE,BI
+105	Bratislava V	BA,BL,BT,BD,BE,BI
 603	Brezno	BR
 501	Bytča	BY
 502	Čadca	CA
@@ -3831,14 +3831,14 @@ COPY okres_ecv (okres_kod, okres_nazov, ecv) FROM stdin;
 302	Ilava	IL
 703	Kežmarok	KK
 401	Komárno	KN
-802	Košice I	KE, KC, KI
-803	Košice II	KE, KC, KI
-804	Košice III	KE, KC, KI
-805	Košice IV	KE, KC, KI
+802	Košice I	KE,KC,KI
+803	Košice II	KE,KC,KI
+804	Košice III	KE,KC,KI
+805	Košice IV	KE,KC,KI
 806	Košice-okolie	KS
 605	Krupina	KA
 504	Kysucké Nové Mesto	KM
-402	Levice	LV, LL
+402	Levice	LV,LL
 704	Levoča	LE
 505	Liptovský Mikuláš	LM
 606	Lučenec	LC
@@ -3848,16 +3848,16 @@ COPY okres_ecv (okres_kod, okres_nazov, ecv) FROM stdin;
 807	Michalovce	MI
 303	Myjava	MY
 507	Námestovo	NO
-403	Nitra	NR, NI, NT
+403	Nitra	NR,NI,NT
 304	Nové Mesto nad Váhom	NM
-404	Nové Zámky	NZ, NC
+404	Nové Zámky	NZ,NC
 305	Partizánske	PE
 107	Pezinok	PK
 204	Piešťany	PN
 607	Poltár	PT
 706	Poprad	PP
 306	Považská Bystrica	PB
-707	Prešov	PO, PV, PS
+707	Prešov	PO,PV,PS
 307	Prievidza	PD
 308	Púchov	PU
 608	Revúca	RA
@@ -3877,8 +3877,8 @@ COPY okres_ecv (okres_kod, okres_nazov, ecv) FROM stdin;
 405	Šaľa	SA
 406	Topoľčany	TO
 811	Trebišov	TV
-309	Trenčín	TN, TC, TE
-207	Trnava	TT, TA, TB
+309	Trenčín	TN,TC,TE
+207	Trnava	TT,TA,TB
 509	Turčianske Teplice	TR
 510	Tvrdošín	TS
 610	Veľký Krtíš	VK
@@ -3887,7 +3887,7 @@ COPY okres_ecv (okres_kod, okres_nazov, ecv) FROM stdin;
 611	Zvolen	ZV
 612	Žarnovica	ZC
 613	Žiar nad Hronom	ZH
-511	Žilina	ZA, ZI, ZL
+511	Žilina	ZA,ZI,ZL
 \.
 
 ALTER TABLE ONLY ciselnik.okres_ecv
