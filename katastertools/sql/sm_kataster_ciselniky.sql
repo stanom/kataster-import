@@ -3796,3 +3796,100 @@ CREATE TABLE ciselnik.sek (id NUMERIC(3) PRIMARY KEY, popis VARCHAR(100), popis2
 31	spoločnosti ostatné	ostatné podniky, organizácie, ústavy, hospodárstva
 \.
 COMMIT;
+
+--
+-- SM, 05.01.2020, okresy a EČV
+CREATE TABLE okres_ecv (
+    okres_kod smallint NOT NULL,
+    okres_nazov character varying,
+    ecv character varying
+);
+
+COMMENT ON TABLE okres_ecv IS 'EČV
+https://www.slov-lex.sk/pravne-predpisy/SK/ZZ/2009/9/#paragraf-36';
+
+COPY okres_ecv (okres_kod, okres_nazov, ecv) FROM stdin;
+301	Bánovce nad Bebravou	BN
+601	Banská Bystrica	BB, BC, BK
+602	Banská Štiavnica	BS
+701	Bardejov	BJ
+101	Bratislava I	BA, BL, BT, BD, BE, BI
+102	Bratislava II	BA, BL, BT, BD, BE, BI
+103	Bratislava III	BA, BL, BT, BD, BE, BI
+104	Bratislava IV	BA, BL, BT, BD, BE, BI
+105	Bratislava V	BA, BL, BT, BD, BE, BI
+603	Brezno	BR
+501	Bytča	BY
+502	Čadca	CA
+604	Detva	DT
+503	Dolný Kubín	DK
+201	Dunajská Streda	DS
+202	Galanta	GA
+801	Gelnica	GL
+203	Hlohovec	HC
+702	Humenné	HE
+302	Ilava	IL
+703	Kežmarok	KK
+401	Komárno	KN
+802	Košice I	KE, KC, KI
+803	Košice II	KE, KC, KI
+804	Košice III	KE, KC, KI
+805	Košice IV	KE, KC, KI
+806	Košice-okolie	KS
+605	Krupina	KA
+504	Kysucké Nové Mesto	KM
+402	Levice	LV, LL
+704	Levoča	LE
+505	Liptovský Mikuláš	LM
+606	Lučenec	LC
+106	Malacky	MA
+506	Martin	MT
+705	Medzilaborce	ML
+807	Michalovce	MI
+303	Myjava	MY
+507	Námestovo	NO
+403	Nitra	NR, NI, NT
+304	Nové Mesto nad Váhom	NM
+404	Nové Zámky	NZ, NC
+305	Partizánske	PE
+107	Pezinok	PK
+204	Piešťany	PN
+607	Poltár	PT
+706	Poprad	PP
+306	Považská Bystrica	PB
+707	Prešov	PO, PV, PS
+307	Prievidza	PD
+308	Púchov	PU
+608	Revúca	RA
+609	Rimavská Sobota	RS
+808	Rožňava	RV
+508	Ružomberok	RK
+708	Sabinov	SB
+108	Senec	SC
+205	Senica	SE
+206	Skalica	SI
+709	Snina	SV
+809	Sobrance	SO
+810	Spišská Nová Ves	SN
+710	Stará Ľubovňa	SL
+711	Stropkov	SP
+712	Svidník	SK
+405	Šaľa	SA
+406	Topoľčany	TO
+811	Trebišov	TV
+309	Trenčín	TN, TC, TE
+207	Trnava	TT, TA, TB
+509	Turčianske Teplice	TR
+510	Tvrdošín	TS
+610	Veľký Krtíš	VK
+713	Vranov nad Topľou	VT
+407	Zlaté Moravce	ZM
+611	Zvolen	ZV
+612	Žarnovica	ZC
+613	Žiar nad Hronom	ZH
+511	Žilina	ZA, ZI, ZL
+\.
+
+ALTER TABLE ONLY okres_ecv
+    ADD CONSTRAINT okres_ecv_pkey PRIMARY KEY (okres_kod);
+--
