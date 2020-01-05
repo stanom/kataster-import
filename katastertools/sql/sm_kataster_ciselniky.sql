@@ -3799,13 +3799,13 @@ COMMIT;
 
 --
 -- SM, 05.01.2020, okresy a EČV
-CREATE TABLE okres_ecv (
+CREATE TABLE ciselnik.okres_ecv (
     okres_kod smallint NOT NULL,
     okres_nazov character varying,
     ecv character varying
 );
 
-COMMENT ON TABLE okres_ecv IS 'EČV
+COMMENT ON TABLE ciselnik.okres_ecv IS 'EČV
 https://www.slov-lex.sk/pravne-predpisy/SK/ZZ/2009/9/#paragraf-36';
 
 COPY okres_ecv (okres_kod, okres_nazov, ecv) FROM stdin;
@@ -3890,6 +3890,6 @@ COPY okres_ecv (okres_kod, okres_nazov, ecv) FROM stdin;
 511	Žilina	ZA, ZI, ZL
 \.
 
-ALTER TABLE ONLY okres_ecv
+ALTER TABLE ONLY ciselnik.okres_ecv
     ADD CONSTRAINT okres_ecv_pkey PRIMARY KEY (okres_kod);
 --
