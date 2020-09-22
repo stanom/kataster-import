@@ -2,7 +2,7 @@
 # skript pre konvert psql kat. dát do shp, podľa okresov
 # Autor: S.Motyčka
 # prihlasovacie údaje pre psql sa načítavajú z ~/.pgpass
-# spustenie: './sm_data_to_shp_by_district_KNE.sh'
+# spustenie: './sm_data_to_shp_by_district_KNE.sh [YYYYMMDD]'
 
 if [[ "$1" == "" ]] ; then
   echo -e "nebol zadany povinny parameter 'YYYYMMDD'"
