@@ -23,6 +23,7 @@ PG_DB="kataster"
 PG_SQL="SELECT DISTINCT okres FROM ciselnik.\"kataster\" WHERE 1=1 AND okres NOT IN(608) ORDER BY okres ;" 
 #PG_SQL="SELECT DISTINCT okres FROM ciselnik.\"kataster\" WHERE 1=1 ORDER BY okres ;"
 #PG_SQL="SELECT DISTINCT okres FROM ciselnik.\"kataster\" WHERE 1=1 AND okres BETWEEN 506 AND 507 ORDER BY okres ;"
+ULOZISKO="XXX.XXX.XXX.XXX"
 
 
 ### SKRIPT ###
@@ -46,7 +47,7 @@ PG_SQL="SELECT DISTINCT okres FROM ciselnik.\"kataster\" WHERE 1=1 AND okres NOT
 #EOF
 sleep 1 &&\
        7z a -sdel -bso0 ${OUTPUT_DIR}/${OUTPUT_FILE}.7z ${OUTPUT_DIR}/${OUTPUT_FILE}.* &&\
-	rsync ${OUTPUT_DIR}/${OUTPUT_FILE}.7z root@172.30.1.21:/mnt/smb/cop/gis_official/kataster_SHP/${datum}/KN_E/ &&\
+	rsync ${OUTPUT_DIR}/${OUTPUT_FILE}.7z root@${ULOZISKO}:/mnt/smb/cop/gis_official/kataster_SHP/${datum}/KN_E/ &&\
 	rm -f ${OUTPUT_DIR}/${OUTPUT_FILE}.* &&\ 
 	echo -en "\rokres_${f} - OK"
 	
