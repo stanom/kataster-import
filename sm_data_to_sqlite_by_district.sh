@@ -11,8 +11,13 @@ PG_PORT="5432"
 PG_USER="postgres" 
 PG_DB="kataster" 
 #PG_SQL="SELECT DISTINCT okres FROM ciselnik.\"kataster\" WHERE 1=1 AND okres IN(405) ORDER BY okres ;" 
-PG_SQL="SELECT DISTINCT okres FROM ciselnik.\"kataster\" WHERE 1=1 AND UNACCENT(okres_nazov) NOT LIKE okres_nazov ORDER BY okres ;" 
-#PG_SQL="SELECT DISTINCT okres FROM ciselnik.\"kataster\" WHERE 1=1 ORDER BY okres ;" 
+# tie, ktoré obsahujú v názve diakritiku:
+#PG_SQL="SELECT DISTINCT okres FROM ciselnik.\"kataster\" WHERE 1=1 AND UNACCENT(okres_nazov) NOT LIKE okres_nazov ORDER BY okres ;" 
+# tie, ktoré neobsahujú v názve diakritiku:
+#PG_SQL="SELECT DISTINCT okres FROM ciselnik.\"kataster\" WHERE 1=1 AND UNACCENT(okres_nazov) LIKE okres_nazov ORDER BY okres ;" 
+
+PG_SQL="SELECT DISTINCT okres FROM ciselnik.\"kataster\" WHERE 1=1 ORDER BY okres ;" 
+
 
 if [ "$1" == "ArcMap" ] || [ "$1" == "Qgis" ]; then
   GIS_APP="$1"
@@ -54,8 +59,10 @@ sql_data()
       s=$(echo "`sql_data ${o}`")
       f_name_unaccent=$(psql -U postgres -h ${PG_HOST} -p ${PG_PORT} -d ${PG_DB} -q -t -A -c "SELECT UNACCENT(REPLACE(okres_nazov,' ','')) FROM ciselnik.kataster WHERE 1=1 AND okres=${o} LIMIT 1")
       f_name=$(psql -U postgres -h ${PG_HOST} -p ${PG_PORT} -d ${PG_DB} -q -t -A -c "SELECT REPLACE(okres_nazov,' ','') FROM ciselnik.kataster WHERE 1=1 AND okres=${o} LIMIT 1")
-      OUTPUT_FILE="${GIS_APP}_KN_`echo ${STAV} |tr a-z A-Z`_okres_${f_name_unaccent}`[[ ${SRS} != "" ]] && echo "_${SRS}" |sed 's/://g'`.sqlite"
-      OUTPUT_FILE_zip="${GIS_APP}_KN_`echo ${STAV} |tr a-z A-Z`_okres_${f_name}`[[ ${SRS} != "" ]] && echo "_${SRS}" |sed 's/://g'`.sqlite"
+      OUTPUT_FILE="`[[ ${GIS_APP} != "ArcMap" ]] && echo "${GIS_APP}_"`KN_`echo ${STAV} |tr a-z A-Z`_okres_${f_name_unaccent}`[[ ${SRS} != "" ]] && echo "_${SRS}" |sed 's/://g'`.sqlite"
+      OUTPUT_FILE_zip="`[[ ${GIS_APP} != "ArcMap" ]] && echo "${GIS_APP}_"`KN_`echo ${STAV} |tr a-z A-Z`_okres_${f_name}`[[ ${SRS} != "" ]] && echo "_${SRS}" |sed 's/://g'`.sqlite"
+#      OUTPUT_FILE="KN_`echo ${STAV} |tr a-z A-Z`_okres_${f_name_unaccent}`[[ ${SRS} != "" ]] && echo "_${SRS}" |sed 's/://g'`.sqlite"
+#      OUTPUT_FILE_zip="KN_`echo ${STAV} |tr a-z A-Z`_okres_${f_name}`[[ ${SRS} != "" ]] && echo "_${SRS}" |sed 's/://g'`.sqlite"
       ogr2ogr \
                -f "SQLite" ${OUTPUT_DIR}/${OUTPUT_FILE} \
            PG:"host=${PG_HOST} user=${PG_USER} dbname=${PG_DB}" \
@@ -71,6 +78,7 @@ sql_data()
       && echo -en "\rokres_${f_name} - OK" 
     done
 date
+
 
 
 # BUGS:
