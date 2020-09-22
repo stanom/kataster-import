@@ -5,7 +5,7 @@
 # spustenie: './sm_data_to_shp_by_district_KNE.sh'
 
 if [[ "$1" == "" ]] ; then
-  echo -e "nebol zadany povinny parameter [c|e]"
+  echo -e "nebol zadany povinny parameter 'YYYYMMDD'"
   exit 0
 elif [[ ! $1 =~ ^[0-9]{8}$ ]] ; then
   echo -e "vstupny parameter musi byt 8-ciselny 'YYYYMMDD'"
